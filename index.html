@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CodeVerse — Minimal Learning Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ---------- MINIMAL MODERN THEME ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #FBFBFB;
+      color: #1A1A1A;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #E8E8E8;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #AAA;
+      border-radius: 10px;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(251,251,251,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #EDEDED;
+      padding: 0 28px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      z-index: 100;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 1.25rem;
+      letter-spacing: -0.3px;
+      cursor: pointer;
+    }
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: #111;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+    .search-container {
+      flex: 1;
+      max-width: 380px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 8px 16px 8px 38px;
+      background: white;
+      border: 1px solid #E5E5E5;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #AAA;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.03);
+    }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8C8C8C;
+      font-size: 1rem;
+    }
+    .search-results {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #EFEFEF;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      overflow: hidden;
+      display: none;
+      z-index: 200;
+    }
+    .search-results.show {
+      display: block;
+    }
+    .search-item {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 0.9rem;
+    }
+    .search-item:hover {
+      background: #F7F7F7;
+    }
+    .search-item-tag {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-family: monospace;
+      background: #F0F0F0;
+      padding: 2px 8px;
+      border-radius: 30px;
+      color: #666;
+    }
+    .cmd-k {
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: #999;
+      background: #F5F5F5;
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid #E8E8E8;
+    }
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .menu-btn span {
+      width: 20px;
+      height: 2px;
+      background: #1A1A1A;
+      border-radius: 2px;
+      transition: 0.2s;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      background: white;
+      border-right: 1px solid #EFEFEF;
+      overflow-y: auto;
+      padding: 32px 16px;
+      z-index: 90;
+      transition: transform 0.25s ease;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      color: #3A3A3A;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin: 2px 0;
+    }
+    .sidebar-item:hover {
+      background: #F5F5F5;
+      color: #000;
+    }
+    .sidebar-item.active {
+      background: #111;
+      color: white;
+    }
+    .sidebar-emoji {
+      font-size: 1.1rem;
+      width: 28px;
+    }
+
+    /* Main content */
+    .main {
+      margin-left: 260px;
+      padding-top: 64px;
+      min-height: 100vh;
+    }
+    .view {
+      display: none;
+      animation: fadeIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .view.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Home page */
+    .hero {
+      padding: 48px 48px 32px;
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1px solid #E8E8E8;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-family: monospace;
+      color: #666;
+      margin-bottom: 32px;
+    }
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      background: #1A1A1A;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.9); }
+    }
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero-desc {
+      font-size: 1rem;
+      color: #5A5A5A;
+      max-width: 520px;
+      margin-bottom: 32px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    .btn-primary {
+      background: #111;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: #2C2C2C;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #E0E0E0;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      border-color: #AAA;
+      background: #FCFCFC;
+    }
+    .stats {
+      display: flex;
+      gap: 48px;
+      padding-top: 32px;
+      border-top: 1px solid #F0F0F0;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: #8C8C8C;
+      margin-top: 4px;
+    }
+
+    .section {
+      padding: 48px;
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: white;
+      border: 1px solid #EFEFEF;
+      border-radius: 20px;
+      padding: 20px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #DDD;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+    }
+    .card-emoji {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 0.75rem;
+      color: #8C8C8C;
+    }
+
+    /* Topic view */
+    .topic-layout {
+      display: flex;
+    }
+    .topic-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+      padding: 32px 16px;
+      border-right: 1px solid #F0F0F0;
+    }
+    .topic-header {
+      padding-bottom: 20px;
+      border-bottom: 1px solid #EFEFEF;
+      margin-bottom: 20px;
+    }
+    .topic-emoji {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .topic-name {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    .progress-bar {
+      margin-top: 16px;
+      height: 3px;
+      background: #F0F0F0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #111;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    .progress-text {
+      font-size: 0.7rem;
+      font-family: monospace;
+      color: #8C8C8C;
+      margin-top: 6px;
+    }
+    .topic-nav-item {
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin: 2px 0;
+      transition: background 0.15s;
+    }
+    .topic-nav-item:hover {
+      background: #F5F5F5;
+    }
+    .topic-nav-item.active {
+      background: #111;
+      color: white;
+    }
+    .topic-content {
+      flex: 1;
+      max-width: 780px;
+      padding: 48px 48px 80px;
+      margin: 0 auto;
+    }
+    .breadcrumb {
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: #8C8C8C;
+      margin-bottom: 24px;
+    }
+    .breadcrumb span {
+      cursor: pointer;
+    }
+    .article-header {
+      margin-bottom: 40px;
+    }
+    .article-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8C8C8C;
+      margin-bottom: 12px;
+    }
+    .article-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .article-meta {
+      display: flex;
+      gap: 20px;
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: #8C8C8C;
+    }
+    .divider {
+      height: 1px;
+      background: #F0F0F0;
+      margin: 28px 0;
+    }
+    .article-body {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #2A2A2A;
+    }
+    .article-body h2 {
+      font-size: 1.5rem;
+      margin: 40px 0 16px;
+    }
+    .article-body p {
+      margin-bottom: 20px;
+    }
+    .code-block {
+      margin: 28px 0;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #1E1E1E;
+      border: 1px solid #2A2A2A;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: #2C2C2C;
+      font-size: 0.7rem;
+      font-family: monospace;
+      color: #AAA;
+    }
+    .code-lang {
+      text-transform: uppercase;
+    }
+    .copy-btn {
+      background: #3C3C3C;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #CCC;
+      font-family: monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .copy-btn:hover {
+      background: #4C4C4C;
+      color: white;
+    }
+    pre {
+      margin: 0;
+      padding: 20px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: #E0E0E0;
+      background: #1E1E1E;
+    }
+    .code-output {
+      background: #141414;
+      border-top: 1px solid #2A2A2A;
+      padding: 12px 20px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #8BC34A;
+    }
+    .callout {
+      background: #F9F9F9;
+      border-left: 3px solid #111;
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-radius: 12px;
+      display: flex;
+      gap: 12px;
+    }
+    .footer-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid #F0F0F0;
+    }
+    .nav-btn {
+      padding: 8px 20px;
+      border: 1px solid #E0E0E0;
+      border-radius: 40px;
+      background: white;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-btn.next {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+    .nav-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0,0,0,0.02);
+      }
+      .main {
+        margin-left: 0;
+      }
+      .menu-btn {
+        display: flex;
+      }
+      .hero {
+        padding: 32px 24px;
+      }
+      .section {
+        padding: 32px 24px;
+      }
+      .topic-content {
+        padding: 32px 24px;
+      }
+      .topic-sidebar {
+        display: none;
+      }
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <button class="menu-btn" id="menuBtn" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+  <div class="logo" onclick="goHome()"><div class="logo-mark">&lt;/&gt;</div><span>CodeVerse</span></div>
+  <div class="search-container">
+    <span class="search-icon">⌕</span>
+    <input class="search-input" id="searchInput" type="text" placeholder="Search languages, topics..." oninput="handleSearch(this.value)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <div class="cmd-k">⌘K</div>
+</header>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-item active" onclick="goHome(); setActiveSidebar(this)"><span class="sidebar-emoji">⌂</span>Home</div>
+  <div id="sidebarLanguages"></div>
+</aside>
+<main class="main">
+  <!-- Home view -->
+  <div class="view active" id="homeView">
+    <div class="hero">
+      <!-- <div class="hero-badge"><span class="hero-badge-dot"></span>Dynamic from db.json</div> -->
+      <h1 class="hero-title">Learn to code,<br>every detail explained.</h1>
+      <p class="hero-desc">Complete tutorials with real code examples, annotated line by line. All content loaded from a single JSON file.</p>
+      <div class="hero-buttons">
+        <button class="btn-primary" id="startPython">Start with Python →</button>
+        <button class="btn-secondary" id="exploreDsa">Explore</button>
+      </div>
+      <div class="stats">
+        <div><div class="stat-number" id="langCount">0</div><div class="stat-label">Languages</div></div>
+        <div><div class="stat-number">200+</div><div class="stat-label">Code Examples</div></div>
+        <div><div class="stat-number">∞</div><div class="stat-label">Free</div></div>
+      </div>
+    </div>
+    <div style="display: none;" class="section">
+      <h2 class="section-title">All Languages</h2>
+      <div class="grid" id="categoryGrid"></div>
+    </div>
+    <div class="section">
+      <h2 class="section-title">All Languages</h2>
+      <div class="grid" id="allLanguagesGrid"></div>
+    </div>
+  </div>
+  <!-- Topic view -->
+  <div class="view" id="topicView">
+    <div class="topic-layout">
+      <div class="topic-sidebar" id="topicSidebar"></div>
+      <div class="topic-content">
+        <div class="breadcrumb" id="breadcrumb"></div>
+        <div class="article-header">
+          <div class="article-label" id="articleLabel">Tutorial</div>
+          <h1 class="article-title" id="articleTitle">Loading...</h1>
+          <div class="article-meta" id="articleMeta"></div>
+          <div class="divider"></div>
+        </div>
+        <div class="article-body" id="articleBody"></div>
+        <div class="footer-nav" id="footerNav"></div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  // Global state
+  let contentDB = {};
+  let currentLangId = null;
+  let currentSectionIndex = 0;
+  let searchItems = [];
+
+  // Fetch db.json
+  async function loadData() {
+    try {
+      const res = await fetch('db.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      contentDB = await res.json();
+      // Add id to each language for easier reference
+      for (const [id, lang] of Object.entries(contentDB)) {
+        lang.id = id;
+      }
+      document.getElementById('langCount').innerText = Object.keys(contentDB).length;
+      renderHomePage();
+      buildSidebar();
+      buildSearchIndex();
+      document.getElementById('startPython').onclick = () => openTopic('python');
+      document.getElementById('exploreDsa').onclick = () => openTopic('dsa');
+    } catch (err) {
+      console.error(err);
+      document.getElementById('allLanguagesGrid').innerHTML = '<div style="padding:40px;text-align:center">Failed to load db.json. Make sure it\'s in the same folder.</div>';
+    }
+  }
+
+  function renderHomePage() {
+    // Category grid
+    const categories = [
+      { name: 'Python', emoji: '🐍', id: 'python' },
+      { name: 'JavaScript', emoji: '🟨', id: 'javascript' },
+      { name: 'Java', emoji: '☕', id: 'java' },
+      { name: 'C', emoji: '⚙️', id: 'c' },
+      { name: 'C++', emoji: '🔷', id: 'cpp' },
+      { name: 'C#', emoji: '🟣', id: 'csharp' },
+      { name: 'HTML', emoji: '🌐', id: 'html' },
+      { name: 'CSS', emoji: '🎨', id: 'css' },
+      { name: 'SQL', emoji: '🗄️', id: 'sql' },
+      { name: 'Rust', emoji: '🦀', id: 'rust' },
+      { name: 'Go', emoji: '🐹', id: 'go' },
+      { name: 'Git', emoji: '🔗', id: 'git' }
+    ];
+    document.getElementById('categoryGrid').innerHTML = categories.map(c => `
+      <div class="card" onclick="openTopic('${c.id}')">
+        <div class="card-emoji">${c.emoji}</div>
+        <div class="card-title">${c.name}</div>
+        <div class="card-desc">${contentDB[c.id]?.level || 'Beginner'}</div>
+      </div>
+    `).join('');
+    // All languages grid
+    const allLangs = Object.values(contentDB);
+    document.getElementById('allLanguagesGrid').innerHTML = allLangs.map(l => `
+      <div class="card" onclick="openTopic('${l.id}')">
+        <div class="card-emoji">${l.emoji}</div>
+        <div class="card-title">${l.name}</div>
+        <div class="card-desc">${l.level || 'Beginner'} · ${l.readTime || '10 min'}</div>
+      </div>
+    `).join('');
+  }
+
+  function buildSidebar() {
+    const container = document.getElementById('sidebarLanguages');
+    container.innerHTML = '';
+    for (const [id, lang] of Object.entries(contentDB)) {
+      const div = document.createElement('div');
+      div.className = 'sidebar-item';
+      div.innerHTML = `<span class="sidebar-emoji">${lang.emoji}</span>${lang.name}`;
+      div.onclick = () => openTopic(id);
+      container.appendChild(div);
+    }
+  }
+
+  function buildSearchIndex() {
+    searchItems = [];
+    for (const [id, lang] of Object.entries(contentDB)) {
+      searchItems.push({ label: lang.name, type: 'language', emoji: lang.emoji, action: () => openTopic(id) });
+      if (lang.sections) {
+        lang.sections.forEach((section, idx) => {
+          searchItems.push({
+            label: `${lang.name}: ${section}`,
+            type: 'section',
+            emoji: lang.emoji,
+            action: () => { openTopic(id); setTimeout(() => loadSection(id, idx), 80); }
+          });
+        });
+      }
+    }
+  }
+
+  function handleSearch(query) {
+    const resultsDiv = document.getElementById('searchResults');
+    if (!query.trim()) { resultsDiv.classList.remove('show'); return; }
+    const hits = searchItems.filter(item => item.label.toLowerCase().includes(query.toLowerCase())).slice(0, 6);
+    if (!hits.length) { resultsDiv.classList.remove('show'); return; }
+    resultsDiv.innerHTML = hits.map((h, i) => `
+      <div class="search-item" onclick="executeSearch(${i})">
+        <span>${h.emoji}</span>
+        <span>${h.label}</span>
+        <span class="search-item-tag">${h.type}</span>
+      </div>
+    `).join('');
+    window.searchActions = hits.map(h => h.action);
+    resultsDiv.classList.add('show');
+  }
+  window.executeSearch = (idx) => {
+    if (window.searchActions && window.searchActions[idx]) window.searchActions[idx]();
+    document.getElementById('searchResults').classList.remove('show');
+    document.getElementById('searchInput').value = '';
+  };
+  function closeSearch() { setTimeout(() => document.getElementById('searchResults').classList.remove('show'), 150); }
+  document.getElementById('searchInput').addEventListener('blur', closeSearch);
+
+  function goHome() {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('homeView').classList.add('active');
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    document.querySelector('.sidebar-item:first-child').classList.add('active');
+    if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
+  }
+  function setActiveSidebar(el) {
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  function openTopic(langId) {
+    const lang = contentDB[langId];
+    if (!lang) return;
+    currentLangId = langId;
+    currentSectionIndex = 0;
+    renderTopicSidebar(langId);
+    loadSection(langId, 0);
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('topicView').classList.add('active');
+    // Update sidebar active
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    const sidebarItems = document.querySelectorAll('#sidebarLanguages .sidebar-item');
+    for (let i = 0; i < sidebarItems.length; i++) {
+      if (sidebarItems[i].innerText.includes(lang.name)) {
+        sidebarItems[i].classList.add('active');
+        break;
+      }
+    }
+    if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
+  }
+
+  function renderTopicSidebar(langId) {
+    const lang = contentDB[langId];
+    const sidebar = document.getElementById('topicSidebar');
+    const progress = ((currentSectionIndex + 1) / lang.sections.length) * 100;
+    sidebar.innerHTML = `
+      <div class="topic-header">
+        <div class="topic-emoji">${lang.emoji}</div>
+        <div class="topic-name">${lang.name}</div>
+        <div class="progress-bar"><div class="progress-fill" id="topicProgressFill" style="width:${progress}%"></div></div>
+        <div class="progress-text" id="topicProgressText">${currentSectionIndex+1} / ${lang.sections.length}</div>
+      </div>
+      ${lang.sections.map((s, i) => `
+        <div class="topic-nav-item ${i === currentSectionIndex ? 'active' : ''}" onclick="loadSection('${langId}', ${i})">${s}</div>
+      `).join('')}
+    `;
+  }
+
+  function loadSection(langId, idx) {
+    const lang = contentDB[langId];
+    currentSectionIndex = idx;
+    const sectionName = lang.sections[idx];
+    // Update sidebar progress and active item
+    const progressFill = document.getElementById('topicProgressFill');
+    const progressText = document.getElementById('topicProgressText');
+    if (progressFill) progressFill.style.width = `${((idx+1)/lang.sections.length)*100}%`;
+    if (progressText) progressText.innerText = `${idx+1} / ${lang.sections.length}`;
+    document.querySelectorAll('.topic-nav-item').forEach((item, i) => {
+      if (i === idx) item.classList.add('active');
+      else item.classList.remove('active');
+    });
+    // Breadcrumb
+    document.getElementById('breadcrumb').innerHTML = `<span onclick="goHome()">Home</span> / <span onclick="openTopic('${langId}')">${lang.name}</span> / <span>${sectionName}</span>`;
+    document.getElementById('articleLabel').innerHTML = lang.name + ' Tutorial';
+    document.getElementById('articleTitle').innerHTML = sectionName;
+    document.getElementById('articleMeta').innerHTML = `<span>⏱ ${lang.readTime || '12 min'}</span><span>📊 ${lang.level || 'Beginner'}</span><span>📑 ${idx+1} of ${lang.sections.length}</span>`;
+    // Content
+    const secData = lang.content && lang.content[sectionName];
+    let bodyHtml = '';
+    if (secData) {
+      if (secData.html) bodyHtml += secData.html;
+      if (secData.code) {
+        bodyHtml += `<div class="code-block">
+          <div class="code-header"><span class="code-lang">${secData.code.language || 'code'}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre>${escapeHtml(secData.code.code)}</pre>
+          ${secData.code.output ? `<div class="code-output">${escapeHtml(secData.code.output)}</div>` : ''}
+        </div>`;
+      }
+    } else {
+      bodyHtml = `<p>No content available for this section yet.</p>`;
+    }
+    document.getElementById('articleBody').innerHTML = bodyHtml;
+    // Footer navigation
+    const prevIdx = idx - 1;
+    const nextIdx = idx + 1;
+    const prevName = prevIdx >= 0 ? lang.sections[prevIdx] : null;
+    const nextName = nextIdx < lang.sections.length ? lang.sections[nextIdx] : null;
+    document.getElementById('footerNav').innerHTML = `
+      ${prevName ? `<button class="nav-btn" onclick="loadSection('${langId}', ${prevIdx})">← ${prevName}</button>` : '<div></div>'}
+      ${nextName ? `<button class="nav-btn next" onclick="loadSection('${langId}', ${nextIdx})">${nextName} →</button>` : '<div></div>'}
+    `;
+    window.scrollTo(0, 0);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  window.copyCode = (btn) => {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    if (!pre) return;
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      const original = btn.innerText;
+      btn.innerText = 'Copied!';
+      setTimeout(() => btn.innerText = original, 1500);
+    });
+  };
+
+  // Keyboard shortcut
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      document.getElementById('searchInput').focus();
+    }
+    if (e.key === 'Escape') {
+      document.getElementById('searchInput').blur();
+      closeSearch();
+    }
+  });
+
+  loadData();
+</script>
+</body>
+</html>
