@@ -1,0 +1,1126 @@
+{
+  "python": {
+    "emoji": "🐍",
+    "name": "Python",
+    "readTime": "85 min",
+    "level": "Beginner",
+    "sections": ["Introduction", "Installation", "Syntax & Indentation", "Data Types", "Lists Tuples & Comprehensions", "Dictionaries & Sets", "Control Flow", "Functions", "Exception Handling", "Object-Oriented Programming", "Generators & Decorators", "File Handling", "Modules & Packages", "Testing with pytest", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<section class='content-section'><h2>What is Python?</h2><p>Python is a <strong>high-level, interpreted, dynamically-typed</strong> programming language created by <strong>Guido van Rossum</strong> and first released in <strong>1991</strong>. Its design philosophy emphasizes code readability and simplicity, famously captured in <em>The Zen of Python</em> — run <code>import this</code> in any Python interpreter to see the full list.</p><ul class='zen-list'><li>Beautiful is better than ugly</li><li>Simple is better than complex</li><li>Readability counts</li><li>There should be one obvious way to do it</li><li>Explicit is better than implicit</li><li>Flat is better than nested</li><li>Errors should never pass silently</li><li>Now is better than never</li></ul><p>As of <strong>March 2026</strong>, <strong>Python 3.14</strong> is the latest stable version (released February 2026). It builds on Python 3.13’s groundbreaking changes: a production-ready JIT compiler (up to 2–5× faster in many workloads), experimental free-threaded mode (PEP 703, no GIL for true parallelism), dramatically improved error messages, and native support for mobile/embedded systems.</p><div class='callout tip'><span class='callout-ico'>💡</span><div class='callout-body'><strong>Why Python dominates in 2026?</strong><ul><li><strong>AI/ML:</strong> PyTorch 2.6, TensorFlow 2.18, JAX, Hugging Face Transformers + Agents</li><li><strong>Data Science:</strong> pandas 2.2+, Polars (blazing fast), NumPy 2.2, SciPy</li><li><strong>Web & APIs:</strong> FastAPI 0.115 (async-first), Django 5.2, Flask 3.1</li><li><strong>Automation & DevOps:</strong> Ansible 2.18, Selenium 4.27, Playwright</li><li><strong>Used by:</strong> Google, Netflix, Instagram, Spotify, NASA, Dropbox, OpenAI</li></ul></div></div><h3>Python vs Other Languages (March 2026 Update)</h3><div class='table-container'><table class='comparison-table bordered'><thead><tr><th>Aspect</th><th>Python</th><th>JavaScript</th><th>Java</th><th>Rust</th></tr></thead><tbody><tr><td>Typing</td><td>Dynamic + optional type hints (PEP 484/695)</td><td>Dynamic (TypeScript 5.7 adds static)</td><td>Static</td><td>Static + ownership</td></tr><tr><td>Performance</td><td>Excellent (JIT in 3.14, free-threaded, Numba, PyPy)</td><td>Very fast (V8, Bun 1.2, Deno)</td><td>Very fast (JVM + GraalVM)</td><td>Native speed</td></tr><tr><td>Learning Curve</td><td>Very easy</td><td>Easy</td><td>Moderate</td><td>Hard (but rewarding)</td></tr><tr><td>Ecosystem</td><td>600K+ packages on PyPI</td><td>2.5M+ on npm</td><td>Huge enterprise ecosystem</td><td>Growing rapidly (crates.io)</td></tr><tr><td>2026 Sweet Spot</td><td>AI, data, scripting, web APIs</td><td>Frontend & full-stack</td><td>Enterprise & Android</td><td>Systems & performance-critical</td></tr></tbody></table></div><p>Python continues to be the easiest high-productivity language that scales to the world’s largest companies and most demanding AI workloads.</p></section>",
+        "code": {
+          "language": "python",
+          "code": "# Your first Python program (Python 3.14+)\nprint(\"Hello, World!\")\n\n# Variables with modern type hints (PEP 695 syntax)\nname: str = \"Alice\"\nage: int = 30\nis_student: bool = True\n\n# f-strings + debug syntax + new 3.14 improvements\nprint(f\"{name} is {age} years old. Student: {is_student=}\")\n\n# Quick demo of 2026 data structures\nfruits = ['apple', 'banana', 'cherry']\nperson = {'name': name, 'age': age, 'student': is_student}\nprint('Fruits:', fruits)\nprint('Person dict:', person)\n\n# Type checking & Zen\nimport sys\nprint(type(age), type(name), type(fruits))\nprint(f\"Current Python version: {sys.version.split()[0]}\")\n\n# Zen of Python (uncomment)\n# import this",
+          "output": "Hello, World!\nAlice is 30 years old. Student: is_student=True\nFruits: ['apple', 'banana', 'cherry']\nPerson dict: {'name': 'Alice', 'age': 30, 'student': True}\n<class 'int'> <class 'str'> <class 'list'>\nCurrent Python version: 3.14.3"
+        }
+      },
+      "Installation": {
+        "html": "<h2>Installing Python</h2><p>Always use the latest stable — <strong>Python 3.14.3</strong> as of March 2026. Download from <a href='https://python.org' target='_blank'>python.org</a>. Windows: check 'Add Python to PATH'. macOS: <code>brew install python@3.14</code>. Linux: <code>sudo apt install python3.14 python3.14-venv python3.14-dev</code>.</p><div class='callout cal-tip'><span class='callout-ico'>💡</span><div class='callout-body'><strong>2026 Must-Follow Best Practices</strong><ul><li>Version manager: <code>pyenv</code> or <code>asdf</code></li><li>Always use virtual environments: <code>python -m venv .venv</code></li><li>Ultra-fast package manager: <code>uv</code> (10–100× faster than pip) or Poetry/Rye</li><li>IDE: VS Code + Python extension + Ruff + Pylance + Pyright</li><li>Never use system Python for projects — isolation is mandatory</li><li>Enable free-threaded mode experimentally for CPU-bound tasks</li></ul></div></div><h3>Verification Commands (2026)</h3><ul><li><code>python --version</code></li><li><code>uv --version</code></li><li><code>python -m venv .venv && source .venv/bin/activate</code></li></ul>",
+        "code": {
+          "language": "bash",
+          "code": "# 2026 recommended flow\npython --version\n\n# Create & activate venv\npython -m venv .venv\nsource .venv/bin/activate  # macOS/Linux\n\n# Install uv (fastest installer)\ncurl -LsSf https://astral.sh/uv/install.sh | sh\nuv pip install --upgrade pip requests numpy pandas polars torch\n\n# Traditional (still works)\npip install --upgrade pip requests numpy\npip list | head -8",
+          "output": "Python 3.14.3\nSuccessfully installed requests-2.32.3 numpy-2.2.2 pandas-2.2.3 polars-1.12.0 torch-2.6.0\nrequests 2.32.3\nnumpy 2.2.2\npandas 2.2.3\npolars 1.12.0\ntorch 2.6.0"
+        }
+      },
+      "Syntax & Indentation": {
+        "html": "<h2>Syntax & Indentation</h2><p>Python uses **4 spaces** (PEP 8) for indentation instead of braces. This enforces clean, readable code. Mixing tabs/spaces raises <code>IndentationError</code>. Comments use <code>#</code>; docstrings use triple quotes. In 2026, Ruff + Black enforce perfect style automatically.</p><div class='callout cal-warning'><span class='callout-ico'>⚠️</span><div class='callout-body'>Set your editor to insert 4 spaces and convert tabs immediately. Never mix!</div></div><h3>PEP 8 & Modern Rules (2026)</h3><ul><li>Line length: 88 characters (Black default)</li><li>snake_case for variables/functions</li><li>Type hints everywhere (PEP 484 + PEP 695 syntax)</li><li>Google or NumPy style docstrings</li><li>Two blank lines between top-level functions</li></ul><p>Tools: Ruff (fastest linter + formatter), Black, isort, Pyright.</p>",
+        "code": {
+          "language": "python",
+          "code": "# Correct 4-space indentation + full PEP 8 + type hints\ndef example_function(param: int) -> str:\n    \"\"\"Google-style docstring example.\n\n    Args:\n        param: Input integer\n    Returns:\n        Formatted string\n    \"\"\"\n    if param > 0:\n        for i in range(param):\n            print(f\"Iteration {i}\")\n    return f\"You passed: {param}\"\n\n# List comprehension (Pythonic gold)\nsquares = [x**2 for x in range(10) if x % 2 == 0]\nprint(\"Even squares:\", squares)\n\n# Line continuation with parentheses\nresult = (1 + 2 + 3 + 4 + 5 +\n          6 + 7 + 8 + 9 + 10)",
+          "output": "Iteration 0\nIteration 1\nIteration 2\nIteration 3\nIteration 4\nIteration 5\nIteration 6\nIteration 7\nIteration 8\nIteration 9\nEven squares: [0, 4, 16, 36, 64]"
+        }
+      },
+      "Data Types": {
+        "html": "<h2>Data Types</h2><p>Python’s built-in types include <code>int</code> (arbitrary precision), <code>float</code>, <code>str</code> (Unicode), <code>bool</code>, <code>list</code>, <code>tuple</code>, <code>dict</code>, <code>set</code>, <code>NoneType</code>, <code>bytes</code>. Everything is an object. Mutable (list, dict, set) vs immutable (tuple, str, int, frozenset). In 2026 use <code>dataclasses</code>, <code>pydantic v2</code>, or <code>typing.TypedDict</code> for structured data.</p><div class='callout cal-tip'><span class='callout-ico'>💡</span><div class='callout-body'><strong>Pro Tips 2026</strong><ul><li><code>collections.defaultdict</code>, <code>Counter</code>, <code>deque</code></li><li><code>isinstance()</code> over <code>type() ==</code></li><li>Use <code>match</code> for structural pattern matching</li></ul></div></div>",
+        "code": {
+          "language": "python",
+          "code": "age: int = 25\nprice: float = 19.99\nname: str = \"Python 3.14\"\nis_fun: bool = True\n\n# Mutable vs Immutable examples\ndata_list = [\"apple\", \"banana\"]\ncoords = (10.5, 20.5)\nunique_ids = {101, 102, 103}\nperson = {\"name\": name, \"age\": age}\n\nprint(type(age), type(name), type(data_list))\nprint(\"Set auto-dedupes:\", {1, 1, 2, 2, 3})\n\n# Modern dataclasses (2026 standard)\nfrom dataclasses import dataclass\n@dataclass\nclass Point:\n    x: float\n    y: float\n    color: str = \"blue\"",
+          "output": "<class 'int'> <class 'str'> <class 'list'>\nSet auto-dedupes: {1, 2, 3}"
+        }
+      },
+      "Lists Tuples & Comprehensions": {
+        "html": "<h2>Lists, Tuples & Comprehensions</h2><p>Lists are mutable ordered collections. Tuples are immutable and hashable (great for dict keys). Comprehensions and generator expressions are the most Pythonic way to create and transform data — they replace 90% of manual loops and are faster.</p><div class='callout cal-tip'><span class='callout-ico'>💡</span><div class='callout-body'>Use tuples for constants/config. Use comprehensions for clean, fast code. Generator expressions save memory on huge datasets.</div></div>",
+        "code": {
+          "language": "python",
+          "code": "fruits = ['apple', 'banana', 'cherry']\nfruits.append('date')\nprint('List:', fruits)\n\n# Tuple (immutable)\ncoords = (40.7128, -74.0060)\n\n# List comprehension (very Pythonic)\nsquares = [x**2 for x in range(10) if x % 2 == 0]\nprint('Even squares:', squares)\n\n# Generator expression (memory efficient)\neven_gen = (x**2 for x in range(10) if x % 2 == 0)\nprint('Generator list:', list(even_gen))",
+          "output": "List: ['apple', 'banana', 'cherry', 'date']\nEven squares: [0, 4, 16, 36, 64]\nGenerator list: [0, 4, 16, 36, 64]"
+        }
+      },
+      "Dictionaries & Sets": {
+        "html": "<h2>Dictionaries & Sets</h2><p>Dictionaries (hash maps) are the workhorse of Python — O(1) lookups. Sets are unordered unique collections. Both gained powerful new syntax in recent versions (dict | merge, set operators). Use <code>defaultdict</code> and <code>Counter</code> from collections for advanced use cases.</p>",
+        "code": {
+          "language": "python",
+          "code": "person = {'name': 'Alice', 'age': 30}\nperson['city'] = 'New York'\nprint('Dict:', person)\n\nunique = {1, 2, 2, 3, 3, 4}\nprint('Set:', unique)\n\n# Dictionary comprehension\nsquared = {x: x**2 for x in range(6)}\nprint('Squared dict:', squared)\n\n# Merge operator (Python 3.9+)\nconfig = {'debug': True} | {'port': 8080}\nprint('Merged:', config)",
+          "output": "Dict: {'name': 'Alice', 'age': 30, 'city': 'New York'}\nSet: {1, 2, 3, 4}\nSquared dict: {0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25}\nMerged: {'debug': True, 'port': 8080}"
+        }
+      },
+      "Control Flow": {
+        "html": "<h2>Control Flow</h2><p><code>if/elif/else</code>, <code>for</code>/<code>while</code> loops with <code>else</code> clause, and structural pattern matching (<code>match</code> since 3.10). Use <code>enumerate()</code>, <code>zip()</code>, and comprehensions for elegant iteration. The <code>match</code> statement is now production-ready in 2026.</p>",
+        "code": {
+          "language": "python",
+          "code": "# Structural pattern matching (3.10+)\nscore = 85\nmatch score:\n    case 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99 | 100:\n        grade = 'A'\n    case _ if score >= 80:\n        grade = 'B'\n    case _:\n        grade = 'F'\nprint(f\"Grade: {grade}\")\n\n# Pythonic iteration\nfor i, fruit in enumerate(['apple', 'banana', 'cherry'], 1):\n    print(i, fruit)\n\n# While with else\ncount = 0\nwhile count < 3:\n    print(f\"Count: {count}\")\n    count += 1\nelse:\n    print(\"Loop finished normally\")",
+          "output": "Grade: B\n1 apple\n2 banana\n3 cherry\nCount: 0\nCount: 1\nCount: 2\nLoop finished normally"
+        }
+      },
+      "Functions": {
+        "html": "<h2>Functions</h2><p>Defined with <code>def</code>. Support defaults, <code>*args</code>, <code>**kwargs</code>, type hints, docstrings, and first-class status. Lambdas for quick one-liners. In 2026 every production function uses type hints + Google-style docstrings + static type checking with Pyright or mypy.</p><div class='callout cal-tip'><span class='callout-ico'>💡</span><div class='callout-body'>Use <code>typing</code> module + <code>pyright</code> or <code>mypy</code> for strict checking.</div></div>",
+        "code": {
+          "language": "python",
+          "code": "def greet(name: str = \"Guest\", *hobbies: str) -> str:\n    \"\"\"Friendly greeting with optional hobbies.\"\"\"\n    if hobbies:\n        return f\"Hello {name}! Hobbies: {', '.join(hobbies)}\"\n    return f\"Hello, {name}!\"\n\ndef calculate(*numbers: int, multiplier: int = 1) -> int:\n    return sum(numbers) * multiplier\n\n# Lambda example\nsquare = lambda x: x * x\n\nprint(greet(\"Alice\", \"coding\", \"gaming\"))\nprint(calculate(1, 2, 3, 4, multiplier=2))\nprint(square(7))",
+          "output": "Hello Alice! Hobbies: coding, gaming\n20\n49"
+        }
+      },
+      "Exception Handling": {
+        "html": "<h2>Exception Handling</h2><p>Use <code>try/except/else/finally</code>. Catch specific exceptions first. Always log in production. Context managers (<code>with</code>) and custom exceptions are standard. New improved tracebacks in 3.13+ make debugging easier than ever.</p>",
+        "code": {
+          "language": "python",
+          "code": "try:\n    result = 10 / 0\nexcept ZeroDivisionError as e:\n    print(\"Cannot divide by zero!\")\n    print(f\"Error: {e}\")\nfinally:\n    print(\"Cleanup always runs\")\n\n# Custom exception\nclass MyError(Exception): pass\n\ntry:\n    raise MyError(\"Custom error message\")\nexcept MyError as e:\n    print(e)",
+          "output": "Cannot divide by zero!\nError: division by zero\nCleanup always runs\nCustom error message"
+        }
+      },
+      "Object-Oriented Programming": {
+        "html": "<h2>Object-Oriented Programming</h2><p>Python supports full OOP with classes, single/multiple inheritance, polymorphism, and encapsulation. Use <code>__init__</code>, properties, magic methods, and abstract base classes. In 2026 the recommendation is to use <code>dataclasses</code> or <code>pydantic.BaseModel</code> instead of manual boilerplate.</p><div class='callout cal-tip'><span class='callout-ico'>💡</span><div class='callout-body'>Duck typing + dataclasses = maximum productivity.</div></div>",
+        "code": {
+          "language": "python",
+          "code": "class Animal:\n    def __init__(self, name: str):\n        self.name = name\n    def speak(self) -> str:\n        return f\"{self.name} makes a sound\"\n\nclass Dog(Animal):\n    def speak(self) -> str:\n        return f\"{self.name} says Woof!\"\n\nclass Cat(Animal):\n    def speak(self) -> str:\n        return f\"{self.name} says Meow!\"\n\nanimals = [Dog(\"Rex\"), Cat(\"Luna\"), Animal(\"Generic\")]\nfor animal in animals:\n    print(animal.speak())\n\n# Modern dataclass\nfrom dataclasses import dataclass\n@dataclass\nclass Point:\n    x: float\n    y: float",
+          "output": "Rex says Woof!\nLuna says Meow!\nGeneric makes a sound"
+        }
+      },
+      "Generators & Decorators": {
+        "html": "<h2>Generators & Decorators</h2><p>Generators (<code>yield</code>) are memory-efficient iterators. Decorators add behavior (logging, timing, caching) without modifying the original function. Both are heavily used in production AI and web frameworks.</p>",
+        "code": {
+          "language": "python",
+          "code": "# Generator\n def fibonacci(n: int):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b\n\nprint(list(fibonacci(8)))\n\n# Decorator with timing\ndef timer(func):\n    import time\n    def wrapper(*args):\n        start = time.time()\n        result = func(*args)\n        print(f\"{func.__name__} took {time.time() - start:.4f}s\")\n        return result\n    return wrapper\n\n@timer\ndef slow_function():\n    import time\n    time.sleep(0.5)\n    return \"done\"\n\nslow_function()",
+          "output": "[0, 1, 1, 2, 3, 5, 8, 13]\nslow_function took 0.5002s"
+        }
+      },
+      "File Handling": {
+        "html": "<h2>File Handling</h2><p>Use context managers (<code>with open()</code>) for automatic cleanup. Prefer <code>pathlib</code> (object-oriented) over raw <code>open()</code>. Always specify <code>encoding='utf-8'</code>. Handle <code>FileNotFoundError</code> and <code>PermissionError</code> explicitly. In 2026 <code>pathlib</code> is the default choice.</p>",
+        "code": {
+          "language": "python",
+          "code": "from pathlib import Path\n\nfile_path = Path(\"example.txt\")\nfile_path.write_text(\"Hello from Python 3.14!\\nLine 2.\\nLine 3.\", encoding=\"utf-8\")\n\ncontent = file_path.read_text(encoding=\"utf-8\")\nprint(\"Full content:\\n\", content)\n\n# Traditional with statement\nwith open(\"example.txt\", \"r\", encoding=\"utf-8\") as f:\n    for line_no, line in enumerate(f, 1):\n        print(f\"Line {line_no}: {line.strip()}\")",
+          "output": "Full content:\n Hello from Python 3.14!\nLine 2.\nLine 3.\n\nLine 1: Hello from Python 3.14!\nLine 2: Line 2.\nLine 3: Line 3."
+        }
+      },
+      "Modules & Packages": {
+        "html": "<h2>Modules & Packages</h2><p>Modules are .py files. Packages are directories with <code>__init__.py</code> (optional since 3.3). Use <code>import</code>, <code>from ... import ...</code>, or aliases. Over 600,000 packages on PyPI. Manage dependencies with <code>uv.lock</code>, <code>pyproject.toml</code>, or <code>requirements.txt</code>.</p>",
+        "code": {
+          "language": "python",
+          "code": "import math\nfrom random import randint\nimport requests\n\nfrom datetime import datetime\n\nprint(\"Square root:\", math.sqrt(16))\nprint(\"Random:\", randint(1, 100))\n\nresponse = requests.get(\"https://api.github.com\")\nprint(\"GitHub status:\", response.status_code)\nprint(\"Current year:\", datetime.now().year)",
+          "output": "Square root: 4.0\nRandom: 42\nGitHub status: 200\nCurrent year: 2026"
+        }
+      },
+      "Testing with pytest": {
+        "html": "<h2>Testing with pytest</h2><p>pytest is the industry standard in 2026. Write tests in <code>test_*.py</code> files. Supports fixtures, parametrization, markers, plugins (pytest-cov, pytest-asyncio), and rich reporting. Run with <code>pytest</code> or <code>uv run pytest</code>.</p>",
+        "code": {
+          "language": "python",
+          "code": "# test_calculator.py\nimport pytest\n\ndef add(a: int, b: int) -> int:\n    return a + b\n\ndef test_add():\n    assert add(2, 3) == 5\n\n@pytest.mark.parametrize(\"a,b,expected\", [(1,2,3), (5,5,10), (-1,1,0)])\ndef test_add_param(a, b, expected):\n    assert add(a, b) == expected",
+          "output": "All tests passed (run with pytest)"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas (Beginner → Advanced 2026)</h2><p>Build these in order for a strong portfolio:</p><ul><li><strong>CLI Calculator</strong> with history (JSON) + Rich formatting + argparse</li><li><strong>Persistent Todo CLI</strong> using SQLite + Typer + Rich UI</li><li><strong>Web Scraper Dashboard</strong> (BeautifulSoup + FastAPI + Streamlit)</li><li><strong>Production REST API</strong> with FastAPI, PostgreSQL, SQLAlchemy 2.0, JWT, Docker</li><li><strong>AI Chatbot</strong> using LangChain + Groq/OpenAI + memory + Streamlit</li><li><strong>Pygame Game</strong> (Snake/Platformer) with high-score SQLite</li><li><strong>Automated Report Generator</strong> using pandas + openpyxl + ReportLab + email</li></ul><div class='callout cal-tip'><span class='callout-ico'>💡</span><div class='callout-body'>After each project: GitHub repo with README, .env.example, uv.lock, GitHub Actions CI/CD, and live demo (Streamlit/Share). This is exactly what recruiters and hiring managers look for in 2026.</div></div>",
+        "code": {
+          "language": "python",
+          "code": "# Production-ready CLI Calculator\nimport operator\nfrom typing import Dict\n\nops: Dict[str, callable] = {\n    '+': operator.add, '-': operator.sub,\n    '*': operator.mul, '/': operator.truediv\n}\n\ndef calculator():\n    try:\n        a = float(input(\"First number: \"))\n        op = input(\"Operator (+-*/): \").strip()\n        b = float(input(\"Second number: \"))\n        if op not in ops:\n            raise ValueError(\"Invalid operator\")\n        result = ops[op](a, b)\n        print(f\"✅ Result: {result}\")\n    except Exception as e:\n        print(f\"❌ Error: {e}\")\n\nif __name__ == \"__main__\":\n    calculator()",
+          "output": "First number: 10\nOperator (+-*/): +\nSecond number: 5\n✅ Result: 15.0"
+        }
+      }
+    }
+  },
+  "javascript": {
+    "emoji": "🟨",
+    "name": "JavaScript",
+    "readTime": "72 min",
+    "level": "Beginner",
+    "sections": ["Introduction", "Variables & Data Types", "Functions & Scope", "Arrays & Objects", "DOM Manipulation", "Asynchronous JavaScript", "ES6+ Features", "Modules & Import/Export", "Error Handling", "Testing with Jest", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is JavaScript?</h2><p>JavaScript (JS) runs natively in every browser and on servers via Node.js, Deno, or Bun. Created in 10 days in 1995 by Brendan Eich. As of March 2026, <strong>ECMAScript 2026</strong> is the latest standard, bringing pattern matching, the Temporal API (finally replacing legacy Date), improved resource management, and better async primitives.</p><div class='callout cal-info'><span class='callout-ico'>ℹ️</span><div class='callout-body'>2026 ecosystem: React 19 (compiler), Next.js 15 (Turbopack + App Router), TypeScript 5.7, Bun 1.2 as the fastest Node replacement.</div></div><h3>Where JS Runs in 2026</h3><ul><li>Frontend: React 19, Vue 3.5, Svelte 5, SolidJS</li><li>Backend: Node.js 22, Deno 2, Bun 1.2</li><li>Mobile: React Native + Expo</li><li>Desktop: Electron 32, Tauri 2 (Rust backend)</li><li>Edge & IoT: Cloudflare Workers, Deno Deploy</li></ul>",
+        "code": {
+          "language": "javascript",
+          "code": "console.log(\"Hello, World!\");\n\nconst name = \"Alice\";\nconst currentYear = new Date().getFullYear();\nconsole.log(`Hello, ${name}! Welcome to ${currentYear}.`);\n\n// Modern array methods\n[1, 2, 3, 4].map(n => n * 2).forEach(n => console.log(n));",
+          "output": "Hello, World!\nHello, Alice! Welcome to 2026.\n2\n4\n6\n8"
+        }
+      },
+      "Variables & Data Types": {
+        "html": "<h2>Variables & Data Types</h2><p>Use <code>const</code> by default, <code>let</code> only when reassigning. Never use <code>var</code>. 8 primitives + objects. Dynamic typing with coercion. Always use <code>===</code>. BigInt for huge numbers. Temporal API (ES2026) is the new standard for dates.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "const name = \"Bob\";\nlet age = 25;\nconst isStudent = true;\n\nconsole.log(typeof age, typeof name);\n\n// Coercion examples\nconsole.log(\"5\" + 3); // \"53\"\nconsole.log(\"5\" - 3); // 2\nconsole.log(!!\"hello\"); // true\n\n// BigInt\nconst huge = 123456789012345678901234567890n;\nconsole.log(typeof huge);",
+          "output": "number string\n53\n2\ntrue\nbigint"
+        }
+      },
+      "Functions & Scope": {
+        "html": "<h2>Functions & Scope</h2><p>Functions are first-class. Arrow functions have lexical <code>this</code>. Block scoping with let/const. Closures are everywhere in modern JS (React hooks, event listeners).</p>",
+        "code": {
+          "language": "javascript",
+          "code": "const greet = (name = \"Guest\", ...hobbies) => {\n  console.log(`Hello ${name}! Hobbies: ${hobbies.join(\", \")}`);\n};\n\ngreet(\"Alice\", \"reading\", \"coding\");\n\nconst add = (a, b) => a + b;\nconsole.log(add(5, 3));\n\n// Closure\nconst createCounter = () => {\n  let count = 0;\n  return () => ++count;\n};\nconst counter = createCounter();\nconsole.log(counter(), counter());",
+          "output": "Hello Alice! Hobbies: reading, coding\n8\n1\n2"
+        }
+      },
+      "Arrays & Objects": {
+        "html": "<h2>Arrays & Objects</h2><p>Arrays are dynamic. Objects are mutable key-value stores. Destructuring, spread, optional chaining (<code>?.</code>), nullish coalescing (<code>??</code>), and new pattern matching (ES2026) make code extremely clean.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "const fruits = [\"apple\", \"banana\", \"cherry\"];\nconst upper = fruits.map(f => f.toUpperCase());\nconsole.log(upper);\n\nconst person = { name: \"Alice\", age: 30, greet() { return `Hi, ${this.name}`; } };\nconst { name, age } = person;\nconsole.log(name, age, person.greet());\n\nconst newFruits = [...fruits, \"date\"];\nconsole.log(newFruits.length);",
+          "output": "[\"APPLE\",\"BANANA\",\"CHERRY\"]\nAlice 30 Hi, I'm Alice\n4"
+        }
+      },
+      "DOM Manipulation": {
+        "html": "<h2>DOM Manipulation</h2><p>Interact with HTML via <code>querySelector</code>, <code>addEventListener</code>, <code>classList</code>. Modern APIs: IntersectionObserver, ResizeObserver, MutationObserver, and new Web Components. All examples below run in the browser console.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "// Example (runs in browser console)\nconst demo = document.getElementById(\"demo\");\nif (demo) {\n  demo.textContent = \"Updated by modern JS in 2026! 🚀\";\n  demo.style.color = \"#0066ff\";\n  demo.classList.add(\"highlight\");\n}\n\nconst btn = document.querySelector(\"button\");\nif (btn) {\n  btn.addEventListener(\"click\", () => {\n    alert(\"Button clicked in 2026! 🚀\");\n  });\n}",
+          "output": "/* This code manipulates the DOM in browser; no console output */"
+        }
+      },
+      "Asynchronous JavaScript": {
+        "html": "<h2>Asynchronous JavaScript</h2><p>Single-threaded with event loop. Use Promises, async/await, Fetch, and new Temporal API. Top-level await in modules. Always handle errors. ES2026 adds better resource management for async.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "const fetchData = () => new Promise(resolve => {\n  setTimeout(() => resolve(\"Data from API in 2026\"), 800);\n});\n\nasync function getData() {\n  try {\n    const result = await fetchData();\n    console.log(\"Async result:\", result);\n  } catch (err) {\n    console.error(err);\n  }\n}\n\ngetData();\nconsole.log(\"This runs immediately\");",
+          "output": "This runs immediately\nAsync result: Data from API in 2026"
+        }
+      },
+      "ES6+ Features": {
+        "html": "<h2>ES6+ Features</h2><p>let/const, arrow functions, template literals, destructuring, spread, classes, modules, optional chaining, nullish coalescing, private fields, and new ES2026 features: pattern matching and Temporal API.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "const arr1 = [1, 2, 3];\nconst arr2 = [...arr1, 4, 5];\nconsole.log(arr2);\n\nfunction sum(...numbers) {\n  return numbers.reduce((acc, n) => acc + n, 0);\n}\nconsole.log(\"Sum:\", sum(1, 2, 3, 4));\n\nclass Animal {\n  #name;\n  constructor(name) { this.#name = name; }\n  speak() { console.log(`${this.#name} makes noise`); }\n}\nclass Dog extends Animal {\n  speak() { console.log(\"Dog barks!\"); }\n}\nnew Dog(\"Rex\").speak();",
+          "output": "[1,2,3,4,5]\nSum: 10\nDog barks!"
+        }
+      },
+      "Modules & Import/Export": {
+        "html": "<h2>Modules & Import/Export</h2><p>ES modules are standard. Use <code>type=\"module\"</code> in HTML or <code>.mjs</code> files. Dynamic imports for code splitting.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "// math.js\nexport const add = (a, b) => a + b;\n\n// main.js\nimport { add } from './math.js';\nconsole.log(add(5, 3));",
+          "output": "8"
+        }
+      },
+      "Error Handling": {
+        "html": "<h2>Error Handling</h2><p>try/catch, custom Error classes, and structured error handling with new pattern matching in ES2026.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "try {\n  throw new Error(\"Something went wrong in 2026\");\n} catch (e) {\n  console.error(e.message);\n}",
+          "output": "Something went wrong in 2026"
+        }
+      },
+      "Testing with Jest": {
+        "html": "<h2>Testing with Jest</h2><p>Jest (or Vitest) remains the most popular in 2026. Write tests in <code>*.test.js</code> with expect and describe. Supports snapshots, mocking, and async testing.</p>",
+        "code": {
+          "language": "javascript",
+          "code": "// sum.test.js\ntest('adds 1 + 2 to equal 3', () => {\n  expect(1 + 2).toBe(3);\n});",
+          "output": "All tests passed (run with jest or vitest)"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas (Beginner → Advanced 2026)</h2><ul><li>Todo app with localStorage + React 19 + Tailwind</li><li>Weather dashboard with Fetch + Temporal API</li><li>Full-stack Next.js 15 app with database + auth</li><li>Canvas 2D/3D game with WebGPU</li><li>Real-time chat with Socket.io or WebSockets</li><li>AI-powered note app with Groq API</li></ul>",
+        "code": {
+          "language": "javascript",
+          "code": "console.log(\"Build a todo app with React 19 + Tailwind in 2026!\");",
+          "output": "Build a todo app with React 19 + Tailwind in 2026!"
+        }
+      }
+    }
+  },
+  "java": {
+    "emoji": "☕",
+    "name": "Java",
+    "readTime": "78 min",
+    "level": "Intermediate",
+    "sections": ["Introduction", "Installation & Setup", "Syntax & Data Types", "Control Flow", "Exception Handling", "Object-Oriented Programming", "Collections Framework", "Multithreading & Virtual Threads", "Generics & Lambda", "Testing with JUnit", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is Java?</h2><p>Java is a statically-typed, object-oriented, platform-independent language created by Sun Microsystems (now Oracle) in 1995. “Write Once, Run Anywhere” via the JVM. As of March 2026, <strong>Java 26</strong> (released March 17, 2026) delivers AI integration, cryptography improvements, language simplifications, and massive productivity boosts for enterprise and Android development.</p><div class='callout cal-tip'><span class='callout-ico'>💡</span><div class='callout-body'><strong>Why Java in 2026?</strong><ul><li>Spring Boot 3.4 + GraalVM native images</li><li>Android development with Jetpack Compose</li><li>High-performance backends & microservices</li><li>Excellent tooling (IntelliJ IDEA, Maven, Gradle)</li></ul></div></div>",
+        "code": {
+          "language": "java",
+          "code": "public class HelloWorld {\n  public static void main(String[] args) {\n    System.out.println(\"Hello, World!\");\n    // Virtual thread example (stable since Java 21)\n    Thread.ofVirtual().start(() -> System.out.println(\"Running on virtual thread!\"));\n  }\n}",
+          "output": "Hello, World!\nRunning on virtual thread!"
+        }
+      },
+      "Installation & Setup": {
+        "html": "<h2>Installation & Setup</h2><p>Download JDK 26 from Oracle or Adoptium. Set JAVA_HOME. Use Maven or Gradle. IntelliJ IDEA is the best IDE in 2026. Virtual threads and GraalVM native compilation make Java faster and lighter than ever.</p>",
+        "code": {
+          "language": "bash",
+          "code": "java -version\njavac -version\n\n# Quick Maven project\nmvn archetype:generate -DgroupId=com.example -DartifactId=myapp",
+          "output": "java version \"26\"\njavac 26"
+        }
+      },
+      "Syntax & Data Types": {
+        "html": "<h2>Syntax & Data Types</h2><p>Statically typed with primitives and wrappers. Records, sealed classes, and pattern matching make Java more concise than ever in 2026.</p>",
+        "code": {
+          "language": "java",
+          "code": "public class DataTypes {\n  public static void main(String[] args) {\n    record Point(int x, int y) {}\n    Point p = new Point(10, 20);\n    System.out.println(p);\n  }\n}",
+          "output": "Point[x=10, y=20]"
+        }
+      },
+      "Control Flow": {
+        "html": "<h2>Control Flow</h2><p>if-else, enhanced switch with pattern matching (stable in Java 26), for-each, while loops.</p>",
+        "code": {
+          "language": "java",
+          "code": "public class ControlFlow {\n  public static void main(String[] args) {\n    int score = 85;\n    String grade = switch (score) {\n      case 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100 -> \"A\";\n      default -> \"B\";\n    };\n    System.out.println(\"Grade: \" + grade);\n  }\n}",
+          "output": "Grade: B"
+        }
+      },
+      "Exception Handling": {
+        "html": "<h2>Exception Handling</h2><p>Checked & unchecked exceptions. Try-with-resources, pattern matching for exceptions, and better error messages in Java 26.</p>",
+        "code": {
+          "language": "java",
+          "code": "public class ExceptionDemo {\n  public static void main(String[] args) {\n    try {\n      int x = 10 / 0;\n    } catch (ArithmeticException e) {\n      System.out.println(\"Cannot divide by zero!\");\n    }\n  }\n}",
+          "output": "Cannot divide by zero!"
+        }
+      },
+      "Object-Oriented Programming": {
+        "html": "<h2>Object-Oriented Programming</h2><p>Pure OOP with classes, inheritance, polymorphism, interfaces, and records. Java 26 continues to simplify boilerplate.</p>",
+        "code": {
+          "language": "java",
+          "code": "abstract class Animal {\n  abstract void speak();\n}\nclass Dog extends Animal {\n  void speak() { System.out.println(\"Woof!\"); }\n}\npublic class OOPDemo {\n  public static void main(String[] args) {\n    new Dog().speak();\n  }\n}",
+          "output": "Woof!"
+        }
+      },
+      "Collections Framework": {
+        "html": "<h2>Collections Framework</h2><p>List, Set, Map, Queue with generics and powerful Stream API + pattern matching.</p>",
+        "code": {
+          "language": "java",
+          "code": "import java.util.*;\npublic class CollectionsDemo {\n  public static void main(String[] args) {\n    List<String> list = List.of(\"Apple\", \"Banana\");\n    list.forEach(System.out::println);\n  }\n}",
+          "output": "Apple\nBanana"
+        }
+      },
+      "Multithreading & Virtual Threads": {
+        "html": "<h2>Multithreading & Virtual Threads</h2><p>Virtual threads (Project Loom, stable since Java 21) make concurrent programming simple and scalable. No more thread-pool hell.</p>",
+        "code": {
+          "language": "java",
+          "code": "public class ThreadDemo {\n  public static void main(String[] args) {\n    Thread.ofVirtual().start(() -> System.out.println(\"Virtual thread running in 2026\"));\n  }\n}",
+          "output": "Virtual thread running in 2026"
+        }
+      },
+      "Generics & Lambda": {
+        "html": "<h2>Generics & Lambda</h2><p>Type-safe generics + lambda expressions + functional interfaces power the Stream API.</p>",
+        "code": {
+          "language": "java",
+          "code": "import java.util.*;\npublic class GenericsDemo {\n  public static void main(String[] args) {\n    List<String> list = new ArrayList<>();\n    list.add(\"Hello Java 26\");\n    list.forEach(System.out::println);\n  }\n}",
+          "output": "Hello Java 26"
+        }
+      },
+      "Testing with JUnit": {
+        "html": "<h2>Testing with JUnit</h2><p>JUnit 5 + Jupiter is the standard. Use @Test, @ParameterizedTest, assertions, and Mockito for mocking.</p>",
+        "code": {
+          "language": "java",
+          "code": "import org.junit.jupiter.api.*;\nclass CalculatorTest {\n  @Test\n  void testAdd() {\n    assertEquals(5, Calculator.add(2, 3));\n  }\n}",
+          "output": "All tests passed (run with mvn test)"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas (2026)</h2><ul><li>Banking system with Spring Boot 3.4 + virtual threads</li><li>Student management system with PostgreSQL + GraalVM native</li><li>Real-time chat with WebSockets</li><li>Android app with Jetpack Compose + AI features</li></ul>",
+        "code": {
+          "language": "java",
+          "code": "public class Calculator {\n  public static void main(String[] args) {\n    System.out.println(\"10 + 5 = \" + (10 + 5));\n  }\n}",
+          "output": "10 + 5 = 15"
+        }
+      }
+    }
+  },
+  "c": {
+    "emoji": "⚙️",
+    "name": "C",
+    "readTime": "62 min",
+    "level": "Intermediate",
+    "sections": ["Introduction", "Installation", "Syntax & Data Types", "Control Flow", "Functions", "Pointers & Memory Management", "Arrays & Strings", "Structures & Unions", "Preprocessor Directives", "File I/O", "Dynamic Memory & Linked Lists", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is C?</h2><p>C is a procedural, low-level language created by Dennis Ritchie in 1972. Foundation of C++, Python interpreter, Linux kernel, embedded systems, and game engines. Still the fastest and most portable language for systems programming in 2026.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nint main() {\n  printf(\"Hello, World!\\n\");\n  return 0;\n}",
+          "output": "Hello, World!"
+        }
+      },
+      "Installation": {
+        "html": "<h2>Installation</h2><p>GCC or Clang. Linux: <code>sudo apt install build-essential</code>. Windows: MinGW or WSL2. Compile with <code>-Wall -Wextra -std=c2x</code> for modern standards.</p>",
+        "code": {
+          "language": "bash",
+          "code": "gcc --version\ngcc -Wall -Wextra hello.c -o hello\n./hello",
+          "output": "gcc 14.2.0\nHello, World!"
+        }
+      },
+      "Syntax & Data Types": {
+        "html": "<h2>Syntax & Data Types</h2><p>Case-sensitive, semicolon-terminated statements. Primitives: int, char, float, double. Use <code>sizeof</code> and modern C2x features.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nint main() {\n  printf(\"int size: %zu bytes\\n\", sizeof(int));\n  return 0;\n}",
+          "output": "int size: 4 bytes"
+        }
+      },
+      "Control Flow": {
+        "html": "<h2>Control Flow</h2><p>if-else, switch, for, while, do-while. Manual counters for loops.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nint main() {\n  for (int i = 0; i < 5; i++) {\n    printf(\"%d \", i);\n  }\n  return 0;\n}",
+          "output": "0 1 2 3 4 "
+        }
+      },
+      "Functions": {
+        "html": "<h2>Functions</h2><p>Prototypes required. Pass-by-value; use pointers for reference.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nint add(int a, int b) { return a + b; }\nint main() {\n  printf(\"Sum: %d\\n\", add(5, 3));\n  return 0;\n}",
+          "output": "Sum: 8"
+        }
+      },
+      "Pointers & Memory Management": {
+        "html": "<h2>Pointers & Memory Management</h2><p>Pointers hold addresses. Essential for dynamic allocation with malloc/free. Null checks are critical.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nint main() {\n  int x = 10;\n  int *p = &x;\n  *p = 42;\n  printf(\"Value: %d\\n\", x);\n  return 0;\n}",
+          "output": "Value: 42"
+        }
+      },
+      "Arrays & Strings": {
+        "html": "<h2>Arrays & Strings</h2><p>Fixed-size arrays. Strings are null-terminated char arrays. Use <code>string.h</code> functions.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\n#include <string.h>\nint main() {\n  char str[] = \"Hello\";\n  printf(\"Length: %lu\\n\", strlen(str));\n  return 0;\n}",
+          "output": "Length: 5"
+        }
+      },
+      "Structures & Unions": {
+        "html": "<h2>Structures & Unions</h2><p>Structures group heterogeneous data. Unions save memory.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nstruct Person { char name[50]; int age; };\nint main() {\n  struct Person p = {\"Alice\", 30};\n  printf(\"%s is %d\\n\", p.name, p.age);\n  return 0;\n}",
+          "output": "Alice is 30"
+        }
+      },
+      "Preprocessor Directives": {
+        "html": "<h2>Preprocessor Directives</h2><p>#include, #define, conditional compilation.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\n#define PI 3.14\nint main() {\n  printf(\"PI = %.2f\\n\", PI);\n  return 0;\n}",
+          "output": "PI = 3.14"
+        }
+      },
+      "File I/O": {
+        "html": "<h2>File I/O</h2><p>fopen, fprintf, fclose. Always check return values.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nint main() {\n  FILE *f = fopen(\"test.txt\", \"w\");\n  if (f) {\n    fprintf(f, \"Hello file!\\n\");\n    fclose(f);\n  }\n  return 0;\n}",
+          "output": ""
+        }
+      },
+      "Dynamic Memory & Linked Lists": {
+        "html": "<h2>Dynamic Memory & Linked Lists</h2><p>malloc/free and linked lists are fundamental data structures in C.</p>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\n#include <stdlib.h>\nstruct Node { int data; struct Node* next; };\nint main() {\n  struct Node* head = malloc(sizeof(struct Node));\n  head->data = 10;\n  printf(\"%d\\n\", head->data);\n  free(head);\n  return 0;\n}",
+          "output": "10"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>Student database with file I/O</li><li>Simple Unix shell</li><li>Custom memory allocator</li><li>Console chess game</li></ul>",
+        "code": {
+          "language": "c",
+          "code": "#include <stdio.h>\nint main() {\n  printf(\"10 + 5 = 15\\n\");\n  return 0;\n}",
+          "output": "10 + 5 = 15"
+        }
+      }
+    }
+  },
+  "cpp": {
+    "emoji": "🔷",
+    "name": "C++",
+    "readTime": "82 min",
+    "level": "Advanced",
+    "sections": ["Introduction", "Installation", "Syntax & Data Types", "Object-Oriented Programming", "Templates & Concepts", "STL (Standard Template Library)", "Smart Pointers & RAII", "Concurrency & Coroutines", "Modern C++ Features", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is C++?</h2><p>C++ is a high-performance, multi-paradigm language extending C. C++23/26 modules, concepts, ranges, and coroutines make it safer and more productive. Used in Unreal Engine, browsers, finance, and high-frequency trading.</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <iostream>\nint main() {\n  std::cout << \"Hello, World!\\n\";\n}",
+          "output": "Hello, World!"
+        }
+      },
+      "Installation": {
+        "html": "<h2>Installation</h2><p>GCC/Clang with -std=c++23 or later. CMake is standard. VS Code + CMake Tools or CLion.</p>",
+        "code": {
+          "language": "bash",
+          "code": "g++ -std=c++23 main.cpp -o main\n./main",
+          "output": "Hello, World!"
+        }
+      },
+      "Syntax & Data Types": {
+        "html": "<h2>Syntax & Data Types</h2><p>auto, range-based for, structured bindings, constexpr everywhere.</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <iostream>\nint main() {\n  auto x = 42;\n  std::cout << x << std::endl;\n}",
+          "output": "42"
+        }
+      },
+      "Object-Oriented Programming": {
+        "html": "<h2>Object-Oriented Programming</h2><p>Classes, inheritance, polymorphism, RAII principle (Resource Acquisition Is Initialization).</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <iostream>\nclass Dog {\npublic:\n  void bark() { std::cout << \"Woof!\\n\"; }\n};\nint main() {\n  Dog d; d.bark();\n}",
+          "output": "Woof!"
+        }
+      },
+      "Templates & Concepts": {
+        "html": "<h2>Templates & Concepts</h2><p>Generic programming with C++20 concepts for compile-time safety.</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <iostream>\ntemplate<typename T>\nT add(T a, T b) { return a + b; }\nint main() {\n  std::cout << add(5, 3) << std::endl;\n}",
+          "output": "8"
+        }
+      },
+      "STL (Standard Template Library)": {
+        "html": "<h2>STL (Standard Template Library)</h2><p>vector, map, algorithms, ranges library (C++20+).</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\nint main() {\n  std::vector<int> v = {3,1,4,1,5};\n  std::sort(v.begin(), v.end());\n  for (int n : v) std::cout << n << \" \";\n}",
+          "output": "1 1 3 4 5 "
+        }
+      },
+      "Smart Pointers & RAII": {
+        "html": "<h2>Smart Pointers & RAII</h2><p>unique_ptr, shared_ptr prevent leaks automatically.</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <memory>\nint main() {\n  auto p = std::make_unique<int>(42);\n  std::cout << *p << std::endl;\n}",
+          "output": "42"
+        }
+      },
+      "Concurrency & Coroutines": {
+        "html": "<h2>Concurrency & Coroutines</h2><p>std::thread, std::async, C++20 coroutines.</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <thread>\nint main() {\n  std::thread t([]{ std::cout << \"Thread!\"; });\n  t.join();\n}",
+          "output": "Thread!"
+        }
+      },
+      "Modern C++ Features": {
+        "html": "<h2>Modern C++ Features</h2><p>Modules, ranges, structured bindings, std::optional.</p>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <iostream>\nint main() {\n  auto [x, y] = std::pair{10, 20};\n  std::cout << x << \" \" << y;\n}",
+          "output": "10 20"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>Game with SFML/Unreal</li><li>File compression utility</li><li>Multi-threaded bank system</li><li>Web server with Boost.Asio</li></ul>",
+        "code": {
+          "language": "cpp",
+          "code": "#include <iostream>\nint main() {\n  std::cout << \"15\\n\";\n}",
+          "output": "15"
+        }
+      }
+    }
+  },
+  "csharp": {
+    "emoji": "🟣",
+    "name": "C#",
+    "readTime": "68 min",
+    "level": "Intermediate",
+    "sections": ["Introduction", "Installation", "Syntax & Data Types", "Object-Oriented Programming", "LINQ", "Asynchronous Programming", "Delegates & Events", "Testing with xUnit", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is C#?</h2><p>C# is a modern, object-oriented language from Microsoft. .NET 9 (2026) is blazing fast and fully cross-platform. Used in Unity, ASP.NET Core, Blazor, and MAUI desktop/mobile apps.</p>",
+        "code": {
+          "language": "csharp",
+          "code": "using System;\nclass Program {\n  static void Main() {\n    Console.WriteLine(\"Hello, World!\");\n  }\n}",
+          "output": "Hello, World!"
+        }
+      },
+      "Installation": {
+        "html": "<h2>Installation</h2><p>.NET SDK 9.0 from dotnet.microsoft.com. Use dotnet CLI or Visual Studio 2025.</p>",
+        "code": {
+          "language": "bash",
+          "code": "dotnet --version\ndotnet new console -n MyApp",
+          "output": "9.0.100"
+        }
+      },
+      "Syntax & Data Types": {
+        "html": "<h2>Syntax & Data Types</h2><p>Records, pattern matching, top-level statements, nullable reference types (enabled by default).</p>",
+        "code": {
+          "language": "csharp",
+          "code": "using System;\nclass Program {\n  static void Main() {\n    var p = new { Name = \"Alice\", Age = 30 };\n    Console.WriteLine(p.Name);\n  }\n}",
+          "output": "Alice"
+        }
+      },
+      "Object-Oriented Programming": {
+        "html": "<h2>Object-Oriented Programming</h2><p>Classes, interfaces, records, primary constructors (C# 12+).</p>",
+        "code": {
+          "language": "csharp",
+          "code": "using System;\nabstract class Animal { public abstract void Speak(); }\nclass Dog : Animal { public override void Speak() => Console.WriteLine(\"Woof!\"); }\nclass Program { static void Main() { new Dog().Speak(); } }",
+          "output": "Woof!"
+        }
+      },
+      "LINQ": {
+        "html": "<h2>LINQ</h2><p>SQL-like queries on collections and databases.</p>",
+        "code": {
+          "language": "csharp",
+          "code": "using System.Linq;\nclass Program {\n  static void Main() {\n    var nums = new[] {1,2,3,4};\n    var even = nums.Where(n => n % 2 == 0);\n    Console.WriteLine(string.Join(\" \", even));\n  }\n}",
+          "output": "2 4"
+        }
+      },
+      "Asynchronous Programming": {
+        "html": "<h2>Asynchronous Programming</h2><p>async/await, Task, ValueTask, IAsyncEnumerable.</p>",
+        "code": {
+          "language": "csharp",
+          "code": "using System;\nusing System.Threading.Tasks;\nclass Program {\n  static async Task Main() {\n    await Task.Delay(100);\n    Console.WriteLine(\"Done\");\n  }\n}",
+          "output": "Done"
+        }
+      },
+      "Delegates & Events": {
+        "html": "<h2>Delegates & Events</h2><p>Type-safe function pointers and publish-subscribe pattern.</p>",
+        "code": {
+          "language": "csharp",
+          "code": "using System;\ndelegate void Notify();\nclass Program {\n  event Notify ProcessCompleted;\n  static void Main() { Console.WriteLine(\"Event system ready\"); }\n}",
+          "output": "Event system ready"
+        }
+      },
+      "Testing with xUnit": {
+        "html": "<h2>Testing with xUnit</h2><p>xUnit is the most popular .NET testing framework in 2026.</p>",
+        "code": {
+          "language": "csharp",
+          "code": "using Xunit;\npublic class CalculatorTests {\n  [Fact]\n  public void Add_ReturnsSum() {\n    Assert.Equal(5, 2 + 3);\n  }\n}",
+          "output": "All tests passed"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>Blazor web app with .NET 9</li><li>Unity 3D game</li><li>ASP.NET Core REST API with JWT</li><li>MAUI desktop/mobile app</li></ul>",
+        "code": {
+          "language": "csharp",
+          "code": "using System;\nclass Program { static void Main() { Console.WriteLine(\"15\"); } }",
+          "output": "15"
+        }
+      }
+    }
+  },
+  "html": {
+    "emoji": "🌐",
+    "name": "HTML",
+    "readTime": "42 min",
+    "level": "Beginner",
+    "sections": ["Introduction", "Document Structure", "Text & Headings", "Links & Images", "Lists & Tables", "Forms & Input Types", "Semantic HTML", "HTML5 APIs", "Multimedia & Canvas", "Web Components", "Accessibility", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is HTML?</h2><p>HTML5 is the living standard for structuring web pages. Not a programming language but markup. Works perfectly with CSS and JavaScript. In 2026 it includes native video, audio, canvas, web components, and progressive web apps.</p>",
+        "code": {
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head><title>Hello</title></head>\n<body><h1>Hello World</h1></body>\n</html>",
+          "output": "Displays Hello World"
+        }
+      },
+      "Document Structure": {
+        "html": "<h2>Document Structure</h2><p>DOCTYPE, html, head, body, meta viewport, charset, title. Always include proper meta tags for mobile and SEO.</p>",
+        "code": {
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>My Page</title>\n</head>\n<body></body>\n</html>",
+          "output": ""
+        }
+      },
+      "Text & Headings": {
+        "html": "<h2>Text & Headings</h2><p>h1–h6, p, strong, em, mark, br, small. Use semantic headings for accessibility and SEO.</p>",
+        "code": {
+          "language": "html",
+          "code": "<h1>Main Title</h1>\n<p>This is <strong>bold</strong> and <em>italic</em> text.</p>",
+          "output": ""
+        }
+      },
+      "Links & Images": {
+        "html": "<h2>Links & Images</h2><p>a tag, img with alt and loading=\"lazy\", srcset for responsive images.</p>",
+        "code": {
+          "language": "html",
+          "code": "<a href=\"https://example.com\">Link</a>\n<img src=\"photo.jpg\" alt=\"Description\" loading=\"lazy\">",
+          "output": ""
+        }
+      },
+      "Lists & Tables": {
+        "html": "<h2>Lists & Tables</h2><p>ul, ol, dl, table with thead, tbody, tr, th, td. Use semantic tables for data.</p>",
+        "code": {
+          "language": "html",
+          "code": "<ul><li>Item 1</li></ul>\n<table><tr><th>Name</th><th>Age</th></tr></table>",
+          "output": ""
+        }
+      },
+      "Forms & Input Types": {
+        "html": "<h2>Forms & Input Types</h2><p>form, input types (text, email, number, date, color, file), label, button, datalist. Native validation with required and pattern.</p>",
+        "code": {
+          "language": "html",
+          "code": "<form>\n  <label>Name: <input type=\"text\" required></label>\n  <button type=\"submit\">Submit</button>\n</form>",
+          "output": ""
+        }
+      },
+      "Semantic HTML": {
+        "html": "<h2>Semantic HTML</h2><p>header, nav, main, article, section, aside, footer, figure. Improves accessibility and SEO.</p>",
+        "code": {
+          "language": "html",
+          "code": "<main>\n  <article>\n    <h2>Article Title</h2>\n  </article>\n</main>",
+          "output": ""
+        }
+      },
+      "HTML5 APIs": {
+        "html": "<h2>HTML5 APIs</h2><p>Geolocation, LocalStorage, Canvas, Drag & Drop, Web Workers. All accessible via JavaScript.</p>",
+        "code": {
+          "language": "html",
+          "code": "<script>\n  if (navigator.geolocation) {\n    navigator.geolocation.getCurrentPosition(pos => console.log(pos));\n  }\n</script>",
+          "output": ""
+        }
+      },
+      "Multimedia & Canvas": {
+        "html": "<h2>Multimedia & Canvas</h2><p>video, audio, canvas for 2D/3D graphics and animations.</p>",
+        "code": {
+          "language": "html",
+          "code": "<video controls><source src=\"video.mp4\"></video>\n<canvas id=\"c\" width=\"200\" height=\"200\"></canvas>",
+          "output": ""
+        }
+      },
+      "Web Components": {
+        "html": "<h2>Web Components</h2><p>Custom elements with Shadow DOM and templates. Native reusable components.</p>",
+        "code": {
+          "language": "html",
+          "code": "<my-component></my-component>",
+          "output": ""
+        }
+      },
+      "Accessibility": {
+        "html": "<h2>Accessibility</h2><p>alt, aria-label, role, proper heading order, keyboard navigation. Follow WCAG standards.</p>",
+        "code": {
+          "language": "html",
+          "code": "<img src=\"logo.png\" alt=\"Company Logo\" role=\"img\">",
+          "output": ""
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>Personal portfolio site</li><li>Interactive quiz app</li><li>Restaurant menu with forms</li><li>Canvas drawing tool</li></ul>",
+        "code": {
+          "language": "html",
+          "code": "<h1>My Portfolio</h1>",
+          "output": ""
+        }
+      }
+    }
+  },
+  "css": {
+    "emoji": "🎨",
+    "name": "CSS",
+    "readTime": "58 min",
+    "level": "Beginner",
+    "sections": ["Introduction", "Selectors", "Box Model", "Flexbox", "CSS Grid", "Animations & Transitions", "Responsive Design", "CSS Variables & Custom Properties", "Tailwind vs Vanilla CSS", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is CSS?</h2><p>Cascading Style Sheets styles HTML. Cascade, specificity, inheritance. In 2026: container queries, :has(), scroll-driven animations, and native nesting.</p>",
+        "code": {
+          "language": "css",
+          "code": "body { font-family: system-ui, sans-serif; }",
+          "output": ""
+        }
+      },
+      "Selectors": {
+        "html": "<h2>Selectors</h2><p>Element, class, ID, attribute, pseudo-classes (:hover, :focus), pseudo-elements (::before), combinators, and new :has() selector.</p>",
+        "code": {
+          "language": "css",
+          "code": ".highlight { background: yellow; }\ninput[type=\"text\"] { border: 2px solid gray; }",
+          "output": ""
+        }
+      },
+      "Box Model": {
+        "html": "<h2>Box Model</h2><p>content → padding → border → margin. Always use box-sizing: border-box in 2026 projects.</p>",
+        "code": {
+          "language": "css",
+          "code": ".box {\n  box-sizing: border-box;\n  width: 300px;\n  padding: 20px;\n}",
+          "output": ""
+        }
+      },
+      "Flexbox": {
+        "html": "<h2>Flexbox</h2><p>One-dimensional layout. display: flex, justify-content, align-items, gap.</p>",
+        "code": {
+          "language": "css",
+          "code": ".container {\n  display: flex;\n  justify-content: space-between;\n  gap: 20px;\n}",
+          "output": ""
+        }
+      },
+      "CSS Grid": {
+        "html": "<h2>CSS Grid</h2><p>Two-dimensional layout. grid-template-columns, grid-template-rows, place-items, container queries.</p>",
+        "code": {
+          "language": "css",
+          "code": ".grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 20px;\n}",
+          "output": ""
+        }
+      },
+      "Animations & Transitions": {
+        "html": "<h2>Animations & Transitions</h2><p>@keyframes, transition, animation, and new scroll-driven animations in 2026.</p>",
+        "code": {
+          "language": "css",
+          "code": "@keyframes fadeIn {\n  from { opacity: 0; }\n  to { opacity: 1; }\n}\n.box { animation: fadeIn 1s; }",
+          "output": ""
+        }
+      },
+      "Responsive Design": {
+        "html": "<h2>Responsive Design</h2><p>Media queries, mobile-first, clamp(), container queries (2026 standard).</p>",
+        "code": {
+          "language": "css",
+          "code": "@media (max-width: 600px) {\n  .container { flex-direction: column; }\n}",
+          "output": ""
+        }
+      },
+      "CSS Variables & Custom Properties": {
+        "html": "<h2>CSS Variables & Custom Properties</h2><p>--var-name for theming and reusable values. Perfect for dark mode.</p>",
+        "code": {
+          "language": "css",
+          "code": ":root {\n  --primary-color: #0066ff;\n}\n.button { background: var(--primary-color); }",
+          "output": ""
+        }
+      },
+      "Tailwind vs Vanilla CSS": {
+        "html": "<h2>Tailwind vs Vanilla CSS</h2><p>Utility-first (Tailwind) vs semantic CSS. Both valid; Tailwind is extremely popular in 2026 for rapid development.</p>",
+        "code": {
+          "language": "css",
+          "code": "/* Vanilla */\n.button { padding: 12px 24px; }\n/* Tailwind */\n<button class=\"px-6 py-3 bg-blue-600\">",
+          "output": ""
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>Responsive landing page</li><li>Dashboard with Grid + Flex</li><li>Animated portfolio with scroll animations</li><li>Dark mode toggle with CSS variables</li></ul>",
+        "code": {
+          "language": "css",
+          "code": "body { background: #f0f0f0; }",
+          "output": ""
+        }
+      }
+    }
+  },
+  "sql": {
+    "emoji": "🗄️",
+    "name": "SQL",
+    "readTime": "55 min",
+    "level": "Beginner",
+    "sections": ["Introduction", "SELECT Queries", "Filtering Data", "Joins", "Aggregations", "Subqueries & CTEs", "Window Functions", "Transactions & ACID", "Indexes & Performance", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is SQL?</h2><p>Structured Query Language for relational databases (PostgreSQL, MySQL, SQLite, SQL Server). Essential for data storage and analytics in every company in 2026.</p>",
+        "code": {
+          "language": "sql",
+          "code": "SELECT 'Hello, World!';",
+          "output": "Hello, World!"
+        }
+      },
+      "SELECT Queries": {
+        "html": "<h2>SELECT Queries</h2><p>SELECT columns FROM table ORDER BY LIMIT OFFSET. Use aliases and DISTINCT.</p>",
+        "code": {
+          "language": "sql",
+          "code": "SELECT first_name, salary FROM employees ORDER BY salary DESC LIMIT 5;",
+          "output": ""
+        }
+      },
+      "Filtering Data": {
+        "html": "<h2>Filtering Data</h2><p>WHERE, LIKE, BETWEEN, IN, IS NULL, logical operators, and new pattern matching in some dialects.</p>",
+        "code": {
+          "language": "sql",
+          "code": "SELECT * FROM employees WHERE salary > 50000 AND department = 'Engineering';",
+          "output": ""
+        }
+      },
+      "Joins": {
+        "html": "<h2>Joins</h2><p>INNER, LEFT, RIGHT, FULL OUTER, CROSS JOIN, self-join. Understand join order for performance.</p>",
+        "code": {
+          "language": "sql",
+          "code": "SELECT e.name, d.dept_name FROM employees e LEFT JOIN departments d ON e.dept_id = d.id;",
+          "output": ""
+        }
+      },
+      "Aggregations": {
+        "html": "<h2>Aggregations</h2><p>COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING. Essential for analytics.</p>",
+        "code": {
+          "language": "sql",
+          "code": "SELECT department, COUNT(*) as count, AVG(salary) as avg FROM employees GROUP BY department;",
+          "output": ""
+        }
+      },
+      "Subqueries & CTEs": {
+        "html": "<h2>Subqueries & CTEs</h2><p>Common Table Expressions (WITH) for readable complex queries.</p>",
+        "code": {
+          "language": "sql",
+          "code": "WITH avg_salary AS (SELECT AVG(salary) as avg FROM employees)\nSELECT name FROM employees WHERE salary > (SELECT avg FROM avg_salary);",
+          "output": ""
+        }
+      },
+      "Window Functions": {
+        "html": "<h2>Window Functions</h2><p>ROW_NUMBER, RANK, LAG, LEAD, running totals with OVER clause. Extremely powerful for analytics.</p>",
+        "code": {
+          "language": "sql",
+          "code": "SELECT name, salary, RANK() OVER (ORDER BY salary DESC) as rank FROM employees;",
+          "output": ""
+        }
+      },
+      "Transactions & ACID": {
+        "html": "<h2>Transactions & ACID</h2><p>BEGIN, COMMIT, ROLLBACK. ACID guarantees data integrity in all databases.</p>",
+        "code": {
+          "language": "sql",
+          "code": "BEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nCOMMIT;",
+          "output": ""
+        }
+      },
+      "Indexes & Performance": {
+        "html": "<h2>Indexes & Performance</h2><p>CREATE INDEX, EXPLAIN query plans, B-tree vs Hash indexes. Critical for large datasets.</p>",
+        "code": {
+          "language": "sql",
+          "code": "CREATE INDEX idx_last_name ON employees(last_name);",
+          "output": ""
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>Library management system</li><li>E-commerce database schema</li><li>Employee attendance tracker</li><li>Sales analytics dashboard with window functions</li></ul>",
+        "code": {
+          "language": "sql",
+          "code": "SELECT 'Project ready';",
+          "output": "Project ready"
+        }
+      }
+    }
+  },
+  "rust": {
+    "emoji": "🦀",
+    "name": "Rust",
+    "readTime": "85 min",
+    "level": "Advanced",
+    "sections": ["Introduction", "Ownership", "Borrowing & Lifetimes", "Structs & Enums", "Traits & Generics", "Error Handling", "Smart Pointers", "Concurrency & Async", "Testing", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is Rust?</h2><p>Rust guarantees memory safety without garbage collection via ownership and borrowing. Used in Linux kernel, browsers, blockchain, WebAssembly. Rust 1.85+ (2026) has improved async and const generics.</p>",
+        "code": {
+          "language": "rust",
+          "code": "fn main() {\n    println!(\"Hello, World!\");\n}",
+          "output": "Hello, World!"
+        }
+      },
+      "Ownership": {
+        "html": "<h2>Ownership</h2><p>Each value has one owner. Move or clone. Automatic drop when out of scope.</p>",
+        "code": {
+          "language": "rust",
+          "code": "fn main() {\n    let s1 = String::from(\"hello\");\n    let s2 = s1.clone();\n    println!(\"{}\", s2);\n}",
+          "output": "hello"
+        }
+      },
+      "Borrowing & Lifetimes": {
+        "html": "<h2>Borrowing & Lifetimes</h2><p>References & and &mut with lifetime rules prevent dangling pointers.</p>",
+        "code": {
+          "language": "rust",
+          "code": "fn len(s: &String) -> usize { s.len() }\nfn main() {\n    let s = String::from(\"hello\");\n    println!(\"{}\", len(&s));\n}",
+          "output": "5"
+        }
+      },
+      "Structs & Enums": {
+        "html": "<h2>Structs & Enums</h2><p>Structs and enums with impl blocks and derives.</p>",
+        "code": {
+          "language": "rust",
+          "code": "struct Point { x: i32, y: i32 }\nfn main() {\n    let p = Point { x: 10, y: 20 };\n    println!(\"{}\", p.x);\n}",
+          "output": "10"
+        }
+      },
+      "Traits & Generics": {
+        "html": "<h2>Traits & Generics</h2><p>Traits are interfaces. Generics with trait bounds.</p>",
+        "code": {
+          "language": "rust",
+          "code": "trait Speak { fn speak(&self); }\nstruct Dog;\nimpl Speak for Dog { fn speak(&self) { println!(\"Woof!\"); } }\nfn main() { Dog.speak(); }",
+          "output": "Woof!"
+        }
+      },
+      "Error Handling": {
+        "html": "<h2>Error Handling</h2><p>Result&lt;T, E&gt; and ? operator. ThisError crate for custom errors.</p>",
+        "code": {
+          "language": "rust",
+          "code": "fn main() {\n    let result: Result<i32, &str> = Ok(42);\n    println!(\"{:?}\", result);\n}",
+          "output": "Ok(42)"
+        }
+      },
+      "Smart Pointers": {
+        "html": "<h2>Smart Pointers</h2><p>Box, Rc, Arc, RefCell for different patterns.</p>",
+        "code": {
+          "language": "rust",
+          "code": "fn main() {\n    let b = Box::new(42);\n    println!(\"{}\", *b);\n}",
+          "output": "42"
+        }
+      },
+      "Concurrency & Async": {
+        "html": "<h2>Concurrency & Async</h2><p>Threads, channels, async/await with Tokio.</p>",
+        "code": {
+          "language": "rust",
+          "code": "use std::thread;\nfn main() {\n    thread::spawn(|| println!(\"Thread!\"));\n}",
+          "output": "Thread!"
+        }
+      },
+      "Testing": {
+        "html": "<h2>Testing</h2><p>Built-in tests with #[test] and cargo test.</p>",
+        "code": {
+          "language": "rust",
+          "code": "#[test]\nfn test_add() {\n    assert_eq!(2 + 3, 5);\n}",
+          "output": "All tests passed"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>CLI tool with Clap</li><li>Web server with Actix or Rocket</li><li>Game with Bevy</li><li>Blockchain node</li></ul>",
+        "code": {
+          "language": "rust",
+          "code": "fn main() {\n    println!(\"Rust project ready!\");\n}",
+          "output": "Rust project ready!"
+        }
+      }
+    }
+  },
+  "go": {
+    "emoji": "🐹",
+    "name": "Go",
+    "readTime": "65 min",
+    "level": "Intermediate",
+    "sections": ["Introduction", "Syntax & Data Types", "Functions", "Structs & Interfaces", "Pointers & Memory", "Error Handling", "Concurrency (Goroutines & Channels)", "Testing with go test", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is Go?</h2><p>Go (Golang) is a statically typed, compiled language from Google. Go 1.23+ (2026) has improved generics and iterators. Perfect for cloud services, CLI tools, and high-performance backends.</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}",
+          "output": "Hello, World!"
+        }
+      },
+      "Syntax & Data Types": {
+        "html": "<h2>Syntax & Data Types</h2><p>Short declaration :=, slices, maps, structs. Simplicity is key.</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\nfunc main() {\n\tname := \"Alice\"\n\tfmt.Println(name)\n}",
+          "output": "Alice"
+        }
+      },
+      "Functions": {
+        "html": "<h2>Functions</h2><p>Multiple return values, named returns, variadic parameters.</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\nfunc add(a, b int) int { return a + b }\nfunc main() {\n\tfmt.Println(add(5, 3))\n}",
+          "output": "8"
+        }
+      },
+      "Structs & Interfaces": {
+        "html": "<h2>Structs & Interfaces</h2><p>Structs for data, interfaces for behaviour (implicit implementation).</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\ntype Shape interface { Area() float64 }\ntype Rectangle struct { Width, Height float64 }\nfunc (r Rectangle) Area() float64 { return r.Width * r.Height }\nfunc main() {\n\tfmt.Println(Rectangle{10, 5}.Area())\n}",
+          "output": "50"
+        }
+      },
+      "Pointers & Memory": {
+        "html": "<h2>Pointers & Memory</h2><p>Pointers & for pass-by-reference. Go has garbage collection.</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\nfunc main() {\n\tx := 10\n\tp := &x\n\t*p = 20\n\tfmt.Println(x)\n}",
+          "output": "20"
+        }
+      },
+      "Error Handling": {
+        "html": "<h2>Error Handling</h2><p>Errors are values. Multiple return values with error.</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\nfunc divide(a, b float64) (float64, error) {\n\tif b == 0 { return 0, fmt.Errorf(\"division by zero\") }\n\treturn a / b, nil\n}\nfunc main() {\n\tresult, err := divide(10, 2)\n\tfmt.Println(result, err)\n}",
+          "output": "5 <nil>"
+        }
+      },
+      "Concurrency (Goroutines & Channels)": {
+        "html": "<h2>Concurrency (Goroutines & Channels)</h2><p>Goroutines are lightweight threads. Channels for safe communication. Built-in concurrency is Go’s superpower.</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\nfunc main() {\n\tch := make(chan string)\n\tgo func() { ch <- \"hello from goroutine\" }()\n\tfmt.Println(<-ch)\n}",
+          "output": "hello from goroutine"
+        }
+      },
+      "Testing with go test": {
+        "html": "<h2>Testing with go test</h2><p>Built-in testing with _test.go files and go test command.</p>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"testing\"\nfunc TestAdd(t *testing.T) {\n\tif 2 + 3 != 5 { t.Error(\"wrong\") }\n}",
+          "output": "All tests passed"
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>REST API with Gin</li><li>CLI tool with Cobra</li><li>Concurrent web crawler</li><li>Simple web server with net/http</li></ul>",
+        "code": {
+          "language": "go",
+          "code": "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Println(\"Go project ready!\")\n}",
+          "output": "Go project ready!"
+        }
+      }
+    }
+  },
+  "git": {
+    "emoji": "🔗",
+    "name": "Git & GitHub",
+    "readTime": "48 min",
+    "level": "Beginner",
+    "sections": ["Introduction", "Basic Commands", "Branching & Merging", "Remote Repos & GitHub", "GitHub Workflow & Pull Requests", "Advanced Branching (Rebase & Cherry-pick)", "Git Hooks & GitHub Actions", "Projects"],
+    "content": {
+      "Introduction": {
+        "html": "<h2>What is Git?</h2><p>Git is a distributed version control system. GitHub, GitLab, Bitbucket host remote repos. Essential for collaboration, history, and CI/CD in 2026.</p>",
+        "code": {
+          "language": "bash",
+          "code": "git --version",
+          "output": "git version 2.47.0"
+        }
+      },
+      "Basic Commands": {
+        "html": "<h2>Basic Commands</h2><p>git init, add, commit, status, log, diff, stash. Commit often with clear messages.</p>",
+        "code": {
+          "language": "bash",
+          "code": "git init\necho \"Hello\" > hello.txt\ngit add hello.txt\ngit commit -m \"Initial commit\"",
+          "output": ""
+        }
+      },
+      "Branching & Merging": {
+        "html": "<h2>Branching & Merging</h2><p>git branch, switch, merge, rebase. Feature branches are standard practice.</p>",
+        "code": {
+          "language": "bash",
+          "code": "git checkout -b feature-new\ngit commit -m \"Add feature\"\ngit checkout main\ngit merge feature-new",
+          "output": ""
+        }
+      },
+      "Remote Repos & GitHub": {
+        "html": "<h2>Remote Repos & GitHub</h2><p>git remote add, push, pull, clone. Use SSH keys for security.</p>",
+        "code": {
+          "language": "bash",
+          "code": "git remote add origin https://github.com/user/repo.git\ngit push -u origin main",
+          "output": ""
+        }
+      },
+      "GitHub Workflow & Pull Requests": {
+        "html": "<h2>GitHub Workflow & Pull Requests</h2><p>Fork, branch, commit, push, create PR, review, merge. Use conventional commits.</p>",
+        "code": {
+          "language": "bash",
+          "code": "git checkout -b feature-xyz\ngit push origin feature-xyz",
+          "output": ""
+        }
+      },
+      "Advanced Branching (Rebase & Cherry-pick)": {
+        "html": "<h2>Advanced Branching (Rebase & Cherry-pick)</h2><p>git rebase, git cherry-pick for clean history. Interactive rebase is powerful.</p>",
+        "code": {
+          "language": "bash",
+          "code": "git rebase main",
+          "output": ""
+        }
+      },
+      "Git Hooks & GitHub Actions": {
+        "html": "<h2>Git Hooks & GitHub Actions</h2><p>Pre-commit hooks and CI/CD with GitHub Actions workflows.</p>",
+        "code": {
+          "language": "bash",
+          "code": "echo \"CI ready\" > .github/workflows/ci.yml",
+          "output": ""
+        }
+      },
+      "Projects": {
+        "html": "<h2>Project Ideas</h2><ul><li>Contribute to open source</li><li>Build a personal website repo</li><li>Team collaboration project with PR reviews</li></ul>",
+        "code": {
+          "language": "bash",
+          "code": "git status",
+          "output": ""
+        }
+      }
+    }
+  }
+}
