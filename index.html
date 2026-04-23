@@ -9,7 +9,6 @@
   <!-- Font Awesome 6 (free icons) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ---------- MINIMAL MODERN THEME (unchanged except icon adjustments) ---------- */
     * {
       margin: 0;
       padding: 0;
@@ -232,30 +231,6 @@
       padding: 48px 48px 32px;
       border-bottom: 1px solid #F0F0F0;
     }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: white;
-      border: 1px solid #E8E8E8;
-      padding: 6px 14px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-family: monospace;
-      color: #666;
-      margin-bottom: 32px;
-    }
-    .hero-badge-dot {
-      width: 6px;
-      height: 6px;
-      background: #1A1A1A;
-      border-radius: 50%;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.9); }
-    }
     .hero-title {
       font-size: 3.2rem;
       font-weight: 700;
@@ -472,13 +447,6 @@
       line-height: 1.6;
       color: #2A2A2A;
     }
-    .article-body h2 {
-      font-size: 1.5rem;
-      margin: 40px 0 16px;
-    }
-    .article-body p {
-      margin-bottom: 20px;
-    }
     .code-block {
       margin: 28px 0;
       border-radius: 16px;
@@ -531,15 +499,6 @@
       font-family: monospace;
       font-size: 0.75rem;
       color: #8BC34A;
-    }
-    .callout {
-      background: #F9F9F9;
-      border-left: 3px solid #111;
-      padding: 16px 20px;
-      margin: 24px 0;
-      border-radius: 12px;
-      display: flex;
-      gap: 12px;
     }
     .footer-nav {
       display: flex;
@@ -614,7 +573,6 @@
   <div id="sidebarLanguages"></div>
 </aside>
 <main class="main">
-  <!-- Home view -->
   <div class="view active" id="homeView">
     <div class="hero">
       <h1 class="hero-title">Learn to code,<br>every detail explained.</h1>
@@ -638,7 +596,6 @@
       <div class="grid" id="allLanguagesGrid"></div>
     </div>
   </div>
-  <!-- Topic view -->
   <div class="view" id="topicView">
     <div class="topic-layout">
       <div class="topic-sidebar" id="topicSidebar"></div>
@@ -657,333 +614,259 @@
   </div>
 </main>
 <script>
-  // Global state (original logic untouched, only emoji strings replaced with icon HTML)
-  let contentDB = {};
-  let currentLangId = null;
-  let currentSectionIndex = 0;
-  let searchItems = [];
+let contentDB = {};
+let currentLangId = null;
+let currentSectionIndex = 0;
+let searchItems = [];
+let searchTimeout;
+let selectedIndex = -1;
 
-  // Helper: map language name to Font Awesome icon HTML
-  function getLanguageIcon(langName) {
-    const name = langName.toLowerCase();
-    if (name.includes('python')) return '<i class="fab fa-python"></i>';
-    if (name.includes('javascript')) return '<i class="fab fa-js"></i>';
-    if (name.includes('java')) return '<i class="fab fa-java"></i>';
-    if (name === 'c') return '<i class="fas fa-code"></i>';
-    if (name === 'c++') return '<i class="fas fa-code-branch"></i>';
-    if (name === 'c#') return '<i class="fas fa-code"></i>';
-    if (name.includes('html')) return '<i class="fab fa-html5"></i>';
-    if (name.includes('css')) return '<i class="fab fa-css3-alt"></i>';
-    if (name.includes('sql')) return '<i class="fas fa-database"></i>';
-    if (name.includes('rust')) return '<i class="fab fa-rust"></i>';
-    if (name.includes('go')) return '<i class="fab fa-golang"></i>';
-    if (name.includes('git')) return '<i class="fab fa-git-alt"></i>';
-    return '<i class="fas fa-code"></i>';
-  }
+function getLanguageIcon(langName) {
+  const name = langName.toLowerCase();
+  if (name.includes('python')) return '<i class="fab fa-python"></i>';
+  if (name.includes('javascript')) return '<i class="fab fa-js"></i>';
+  if (name.includes('java')) return '<i class="fab fa-java"></i>';
+  if (name === 'c') return '<i class="fas fa-code"></i>';
+  if (name === 'c++') return '<i class="fas fa-code-branch"></i>';
+  if (name === 'c#') return '<i class="fas fa-code"></i>';
+  if (name.includes('html')) return '<i class="fab fa-html5"></i>';
+  if (name.includes('css')) return '<i class="fab fa-css3-alt"></i>';
+  if (name.includes('sql')) return '<i class="fas fa-database"></i>';
+  if (name.includes('rust')) return '<i class="fab fa-rust"></i>';
+  if (name.includes('go')) return '<i class="fab fa-golang"></i>';
+  if (name.includes('git')) return '<i class="fab fa-git-alt"></i>';
+  return '<i class="fas fa-code"></i>';
+}
 
-  // Fetch db.json
-  async function loadData() {
-    try {
-      const res = await fetch('db.json');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      contentDB = await res.json();
-      for (const [id, lang] of Object.entries(contentDB)) {
-        lang.id = id;
-      }
-      document.getElementById('langCount').innerText = Object.keys(contentDB).length;
-      renderHomePage();
-      buildSidebar();
-      buildSearchIndex();
-      document.getElementById('startPython').onclick = () => openTopic('python');
-      document.getElementById('exploreDsa').onclick = () => openTopic('dsa');
-    } catch (err) {
-      console.error(err);
-      document.getElementById('allLanguagesGrid').innerHTML = '<div style="padding:40px;text-align:center">Failed to load db.json. Make sure it\'s in the same folder.</div>';
-    }
-  }
+async function loadData() {
+  try {
+    const res = await fetch('db.json');
+    contentDB = await res.json();
 
-  function renderHomePage() {
-    // Category grid (using icons instead of emoji)
-    const categories = [
-      { name: 'Python', id: 'python' },
-      { name: 'JavaScript', id: 'javascript' },
-      { name: 'Java', id: 'java' },
-      { name: 'C', id: 'c' },
-      { name: 'C++', id: 'cpp' },
-      { name: 'C#', id: 'csharp' },
-      { name: 'HTML', id: 'html' },
-      { name: 'CSS', id: 'css' },
-      { name: 'SQL', id: 'sql' },
-      { name: 'Rust', id: 'rust' },
-      { name: 'Go', id: 'go' },
-      { name: 'Git', id: 'git' }
-    ];
-    document.getElementById('categoryGrid').innerHTML = categories.map(c => `
-      <div class="card" onclick="openTopic('${c.id}')">
-        <div class="card-icon">${getLanguageIcon(c.name)}</div>
-        <div class="card-title">${c.name}</div>
-        <div class="card-desc">${contentDB[c.id]?.level || 'Beginner'}</div>
-      </div>
-    `).join('');
-    // All languages grid
-    const allLangs = Object.values(contentDB);
-    document.getElementById('allLanguagesGrid').innerHTML = allLangs.map(l => `
-      <div class="card" onclick="openTopic('${l.id}')">
-        <div class="card-icon">${getLanguageIcon(l.name)}</div>
-        <div class="card-title">${l.name}</div>
-        <div class="card-desc">${l.level || 'Beginner'} · ${l.readTime || '10 min'}</div>
-      </div>
-    `).join('');
-  }
-
-  function buildSidebar() {
-    const container = document.getElementById('sidebarLanguages');
-    container.innerHTML = '';
     for (const [id, lang] of Object.entries(contentDB)) {
-      const div = document.createElement('div');
-      div.className = 'sidebar-item';
-      div.innerHTML = `${getLanguageIcon(lang.name)}<span>${lang.name}</span>`;
-      div.onclick = () => openTopic(id);
-      container.appendChild(div);
+      lang.id = id;
     }
-  }
 
-  // Build search index (store icon HTML instead of emoji)
-  function buildSearchIndex() {
-    searchItems = [];
-    for (const [id, lang] of Object.entries(contentDB)) {
-      searchItems.push({
-        label: lang.name,
-        type: 'language',
-        icon: getLanguageIcon(lang.name),
-        action: () => openTopic(id)
-      });
-      if (lang.sections) {
-        lang.sections.forEach((section, idx) => {
-          searchItems.push({
-            label: `${lang.name}: ${section}`,
-            type: 'section',
-            icon: getLanguageIcon(lang.name),
-            action: () => {
-              openTopic(id);
-              setTimeout(() => loadSection(id, idx), 100);
-            }
-          });
+    document.getElementById('langCount').innerText = Object.keys(contentDB).length;
+
+    renderHomePage();
+    buildSidebar();
+    buildSearchIndex();
+
+    document.getElementById('startPython').onclick = () => openTopic('python');
+    document.getElementById('exploreDsa').onclick = () => openTopic('dsa');
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function renderHomePage() {
+  const allLangs = Object.values(contentDB);
+
+  document.getElementById('allLanguagesGrid').innerHTML = allLangs.map(l => `
+    <div class="card" onclick="openTopic('${l.id}')">
+      <div class="card-icon">${getLanguageIcon(l.name)}</div>
+      <div class="card-title">${l.name}</div>
+      <div class="card-desc">${l.level || 'Beginner'} · ${l.readTime || '10 min'}</div>
+    </div>
+  `).join('');
+}
+
+function buildSidebar() {
+  const container = document.getElementById('sidebarLanguages');
+  container.innerHTML = '';
+
+  for (const [id, lang] of Object.entries(contentDB)) {
+    const div = document.createElement('div');
+    div.className = 'sidebar-item';
+    div.innerHTML = `${getLanguageIcon(lang.name)}<span>${lang.name}</span>`;
+    div.onclick = () => openTopic(id);
+    container.appendChild(div);
+  }
+}
+
+function buildSearchIndex() {
+  searchItems = [];
+
+  for (const [id, lang] of Object.entries(contentDB)) {
+    searchItems.push({
+      label: lang.name,
+      type: 'language',
+      icon: getLanguageIcon(lang.name),
+      action: () => openTopic(id)
+    });
+
+    if (lang.sections) {
+      lang.sections.forEach((section, idx) => {
+        searchItems.push({
+          label: `${lang.name}: ${section}`,
+          type: 'section',
+          icon: getLanguageIcon(lang.name),
+          action: () => {
+            openTopic(id);
+            setTimeout(() => loadSection(id, idx), 100);
+          }
         });
-      }
-    }
-  }
-
-  // Search handler (identical logic, only using icon instead of emoji)
-  function handleSearch(query) {
-    const resultsDiv = document.getElementById('searchResults');
-    const searchInput = document.getElementById('searchInput');
-
-    if (!query || !query.trim()) {
-      resultsDiv.classList.remove('show');
-      return;
-    }
-
-    const q = query.toLowerCase().trim();
-    const hits = searchItems.filter(item => item.label.toLowerCase().includes(q)).slice(0, 8);
-
-    if (hits.length === 0) {
-      resultsDiv.classList.remove('show');
-      return;
-    }
-
-    resultsDiv.innerHTML = hits.map((hit, index) => `
-      <div class="search-item" data-index="${index}">
-        ${hit.icon}
-        <span class="search-label">${hit.label}</span>
-        <span class="search-item-tag">${hit.type}</span>
-      </div>
-    `).join('');
-
-    resultsDiv.querySelectorAll('.search-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const idx = parseInt(item.dataset.index);
-        if (hits[idx] && hits[idx].action) {
-          hits[idx].action();
-        }
-        hideSearchResults();
-        searchInput.value = '';
-        searchInput.blur();
       });
-    });
-
-    resultsDiv.classList.add('show');
-  }
-
-  function hideSearchResults() {
-    document.getElementById('searchResults').classList.remove('show');
-  }
-
-  function setupSearchClickOutside() {
-    document.addEventListener('click', (e) => {
-      const searchContainer = document.querySelector('.search-container');
-      if (!searchContainer || !searchContainer.contains(e.target)) {
-        hideSearchResults();
-      }
-    });
-  }
-
-  function setupSearchKeyboard() {
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        hideSearchResults();
-        searchInput.blur();
-      }
-    });
-  }
-
-  function initSearch() {
-    const searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
-    // Note: oninput already calls handleSearch, so we don't add another listener
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInput.focus();
-      }
-    });
-    searchInput.addEventListener('blur', () => {
-      setTimeout(hideSearchResults, 200);
-    });
-    setupSearchClickOutside();
-    setupSearchKeyboard();
-  }
-
-  function goHome() {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById('homeView').classList.add('active');
-    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-    document.querySelector('.sidebar-item:first-child').classList.add('active');
-    if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
-  }
-
-  function setActiveSidebar(el) {
-    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-  }
-
-  function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-  }
-
-  function openTopic(langId) {
-    const lang = contentDB[langId];
-    if (!lang) return;
-    currentLangId = langId;
-    currentSectionIndex = 0;
-    renderTopicSidebar(langId);
-    loadSection(langId, 0);
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById('topicView').classList.add('active');
-    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-    const sidebarItems = document.querySelectorAll('#sidebarLanguages .sidebar-item');
-    for (let i = 0; i < sidebarItems.length; i++) {
-      if (sidebarItems[i].innerText.includes(lang.name)) {
-        sidebarItems[i].classList.add('active');
-        break;
-      }
     }
-    if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+/* 🔥 SEARCH FIX START */
+
+function handleSearch(query) {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => runSearch(query), 150);
+}
+
+function runSearch(query) {
+  const resultsDiv = document.getElementById('searchResults');
+  const input = document.getElementById('searchInput');
+
+  if (!query.trim()) {
+    resultsDiv.classList.remove('show');
+    return;
   }
 
-  function renderTopicSidebar(langId) {
-    const lang = contentDB[langId];
-    const progress = ((currentSectionIndex + 1) / lang.sections.length) * 100;
-    const sidebar = document.getElementById('topicSidebar');
-    sidebar.innerHTML = `
-      <div class="topic-header">
-        ${getLanguageIcon(lang.name)}
-        <div class="topic-name">${lang.name}</div>
-        <div class="progress-bar"><div class="progress-fill" id="topicProgressFill" style="width:${progress}%"></div></div>
-        <div class="progress-text" id="topicProgressText">${currentSectionIndex+1} / ${lang.sections.length}</div>
-      </div>
-      ${lang.sections.map((s, i) => `
-        <div class="topic-nav-item ${i === currentSectionIndex ? 'active' : ''}" onclick="loadSection('${langId}', ${i})">${s}</div>
-      `).join('')}
-    `;
+  const q = query.toLowerCase();
+
+  const hits = searchItems
+    .map(item => ({
+      ...item,
+      score: item.label.toLowerCase().startsWith(q) ? 2 :
+             item.label.toLowerCase().includes(q) ? 1 : 0
+    }))
+    .filter(i => i.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8);
+
+  if (!hits.length) {
+    resultsDiv.classList.remove('show');
+    return;
   }
 
-  function loadSection(langId, idx) {
-    const lang = contentDB[langId];
-    currentSectionIndex = idx;
-    const sectionName = lang.sections[idx];
-    const progressFill = document.getElementById('topicProgressFill');
-    const progressText = document.getElementById('topicProgressText');
-    if (progressFill) progressFill.style.width = `${((idx+1)/lang.sections.length)*100}%`;
-    if (progressText) progressText.innerText = `${idx+1} / ${lang.sections.length}`;
-    document.querySelectorAll('.topic-nav-item').forEach((item, i) => {
-      if (i === idx) item.classList.add('active');
-      else item.classList.remove('active');
-    });
-    document.getElementById('breadcrumb').innerHTML = `<span onclick="goHome()">Home</span> / <span onclick="openTopic('${langId}')">${lang.name}</span> / <span>${sectionName}</span>`;
-    document.getElementById('articleLabel').innerHTML = `<i class="far fa-file-alt"></i> ${lang.name} Tutorial`;
-    document.getElementById('articleTitle').innerHTML = sectionName;
-    document.getElementById('articleMeta').innerHTML = `<span><i class="far fa-clock"></i> ${lang.readTime || '12 min'}</span><span><i class="fas fa-chart-simple"></i> ${lang.level || 'Beginner'}</span><span><i class="fas fa-list-ol"></i> ${idx+1} of ${lang.sections.length}</span>`;
-    const secData = lang.content && lang.content[sectionName];
-    let bodyHtml = '';
-    if (secData) {
-      if (secData.html) bodyHtml += secData.html;
-      if (secData.code) {
-        bodyHtml += `<div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fas fa-terminal"></i> ${secData.code.language || 'code'}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-          <pre>${escapeHtml(secData.code.code)}</pre>
-          ${secData.code.output ? `<div class="code-output">${escapeHtml(secData.code.output)}</div>` : ''}
-        </div>`;
-      }
-    } else {
-      bodyHtml = `<p>No content available for this section yet.</p>`;
-    }
-    document.getElementById('articleBody').innerHTML = bodyHtml;
-    const prevIdx = idx - 1;
-    const nextIdx = idx + 1;
-    const prevName = prevIdx >= 0 ? lang.sections[prevIdx] : null;
-    const nextName = nextIdx < lang.sections.length ? lang.sections[nextIdx] : null;
-    document.getElementById('footerNav').innerHTML = `
-      ${prevName ? `<button class="nav-btn" onclick="loadSection('${langId}', ${prevIdx})"><i class="fas fa-arrow-left"></i> ${prevName}</button>` : '<div></div>'}
-      ${nextName ? `<button class="nav-btn next" onclick="loadSection('${langId}', ${nextIdx})">${nextName} <i class="fas fa-arrow-right"></i></button>` : '<div></div>'}
-    `;
-    window.scrollTo(0, 0);
-  }
+  selectedIndex = -1;
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
-  }
+  resultsDiv.innerHTML = hits.map(hit => `
+    <div class="search-item">
+      ${hit.icon}
+      <span>${hit.label}</span>
+      <span class="search-item-tag">${hit.type}</span>
+    </div>
+  `).join('');
 
-  window.copyCode = (btn) => {
-    const pre = btn.closest('.code-block').querySelector('pre');
-    if (!pre) return;
-    navigator.clipboard.writeText(pre.innerText).then(() => {
-      const original = btn.innerText;
-      btn.innerText = 'Copied!';
-      setTimeout(() => btn.innerText = original, 1500);
-    });
-  };
+  const items = resultsDiv.querySelectorAll('.search-item');
 
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      document.getElementById('searchInput').focus();
-    }
-    if (e.key === 'Escape') {
-      document.getElementById('searchInput').blur();
+  items.forEach((el, i) => {
+    el.onclick = () => {
+      hits[i].action();
+      input.value = '';
       hideSearchResults();
-    }
+    };
   });
 
-  loadData();
-  initSearch(); // only sets up click-outside, blur, and Cmd+K – does not break search
+  resultsDiv.classList.add('show');
+}
+
+/* 🔥 KEYBOARD NAVIGATION */
+
+document.getElementById('searchInput').addEventListener('keydown', (e) => {
+  const items = document.querySelectorAll('.search-item');
+
+  if (!items.length) return;
+
+  if (e.key === 'ArrowDown') {
+    selectedIndex = (selectedIndex + 1) % items.length;
+    updateSelection(items);
+  }
+
+  if (e.key === 'ArrowUp') {
+    selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+    updateSelection(items);
+  }
+
+  if (e.key === 'Enter') {
+    items[selectedIndex]?.click();
+  }
+});
+
+function updateSelection(items) {
+  items.forEach(i => i.style.background = '');
+  if (items[selectedIndex]) {
+    items[selectedIndex].style.background = '#EFEFEF';
+  }
+}
+
+/* 🔥 SEARCH FIX END */
+
+function hideSearchResults() {
+  document.getElementById('searchResults').classList.remove('show');
+}
+
+function goHome() {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('homeView').classList.add('active');
+}
+
+function openTopic(langId) {
+  currentLangId = langId;
+  currentSectionIndex = 0;
+  loadSection(langId, 0);
+
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('topicView').classList.add('active');
+}
+
+function loadSection(langId, idx) {
+  const lang = contentDB[langId];
+  currentSectionIndex = idx;
+
+  const sectionName = lang.sections[idx];
+
+  document.getElementById('articleTitle').innerText = sectionName;
+
+  const secData = lang.content && lang.content[sectionName];
+
+  let html = '';
+
+  if (secData?.html) html += secData.html;
+
+  if (secData?.code) {
+    html += `
+      <div class="code-block">
+        <div class="code-header">
+          ${secData.code.language || 'code'}
+          <button onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>${escapeHtml(secData.code.code)}</pre>
+      </div>
+    `;
+  }
+
+  document.getElementById('articleBody').innerHTML = html;
+}
+
+function escapeHtml(str) {
+  return str?.replace(/[&<>]/g, m =>
+    m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'
+  ) || '';
+}
+
+window.copyCode = (btn) => {
+  const code = btn.closest('.code-block').querySelector('pre').innerText;
+  navigator.clipboard.writeText(code);
+  btn.innerText = 'Copied!';
+  setTimeout(() => btn.innerText = 'Copy', 1000);
+};
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-container')) {
+    hideSearchResults();
+  }
+});
+
+loadData();
 </script>
 </body>
 </html>
