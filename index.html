@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -727,45 +728,142 @@
     }
   }
 
-  function buildSearchIndex() {
-    searchItems = [];
-    for (const [id, lang] of Object.entries(contentDB)) {
-      searchItems.push({ label: lang.name, type: 'language', emoji: lang.emoji, action: () => openTopic(id) });
-      if (lang.sections) {
-        lang.sections.forEach((section, idx) => {
-          searchItems.push({
-            label: `${lang.name}: ${section}`,
-            type: 'section',
-            emoji: lang.emoji,
-            action: () => { openTopic(id); setTimeout(() => loadSection(id, idx), 80); }
-          });
+
+// Build search index
+function buildSearchIndex() {
+  searchItems = [];
+  
+  for (const [id, lang] of Object.entries(contentDB)) {
+    // Language level
+    searchItems.push({
+      label: lang.name,
+      type: 'language',
+      emoji: lang.emoji,
+      action: () => openTopic(id)
+    });
+
+    // Sections
+    if (lang.sections) {
+      lang.sections.forEach((section, idx) => {
+        searchItems.push({
+          label: `${lang.name}: ${section}`,
+          type: 'section',
+          emoji: lang.emoji,
+          action: () => {
+            openTopic(id);
+            // Small delay to let the topic view render first
+            setTimeout(() => loadSection(id, idx), 100);
+          }
         });
-      }
+      });
     }
   }
+}
 
-  function handleSearch(query) {
-    const resultsDiv = document.getElementById('searchResults');
-    if (!query.trim()) { resultsDiv.classList.remove('show'); return; }
-    const hits = searchItems.filter(item => item.label.toLowerCase().includes(query.toLowerCase())).slice(0, 6);
-    if (!hits.length) { resultsDiv.classList.remove('show'); return; }
-    resultsDiv.innerHTML = hits.map((h, i) => `
-      <div class="search-item" onclick="executeSearch(${i})">
-        <span>${h.emoji}</span>
-        <span>${h.label}</span>
-        <span class="search-item-tag">${h.type}</span>
-      </div>
-    `).join('');
-    window.searchActions = hits.map(h => h.action);
-    resultsDiv.classList.add('show');
+// Improved search handler
+function handleSearch(query) {
+  const resultsDiv = document.getElementById('searchResults');
+  const searchInput = document.getElementById('searchInput');
+
+  if (!query || !query.trim()) {
+    resultsDiv.classList.remove('show');
+    return;
   }
-  window.executeSearch = (idx) => {
-    if (window.searchActions && window.searchActions[idx]) window.searchActions[idx]();
-    document.getElementById('searchResults').classList.remove('show');
-    document.getElementById('searchInput').value = '';
-  };
-  function closeSearch() { setTimeout(() => document.getElementById('searchResults').classList.remove('show'), 150); }
-  document.getElementById('searchInput').addEventListener('blur', closeSearch);
+
+  const q = query.toLowerCase().trim();
+  
+  const hits = searchItems
+    .filter(item => item.label.toLowerCase().includes(q))
+    .slice(0, 8); // increased to 8 for better UX
+
+  if (hits.length === 0) {
+    resultsDiv.classList.remove('show');
+    return;
+  }
+
+  resultsDiv.innerHTML = hits.map((hit, index) => `
+    <div class="search-item" data-index="${index}">
+      <span class="search-emoji">${hit.emoji}</span>
+      <span class="search-label">${hit.label}</span>
+      <span class="search-item-tag">${hit.type}</span>
+    </div>
+  `).join('');
+
+  // Attach click handlers (cleaner than using global window.searchActions)
+  resultsDiv.querySelectorAll('.search-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const idx = parseInt(item.dataset.index);
+      if (hits[idx] && hits[idx].action) {
+        hits[idx].action();
+      }
+      hideSearchResults();
+      searchInput.value = '';
+      searchInput.blur();
+    });
+  });
+
+  resultsDiv.classList.add('show');
+}
+
+// Hide search results
+function hideSearchResults() {
+  document.getElementById('searchResults').classList.remove('show');
+}
+
+// Close search when clicking outside
+function setupSearchClickOutside() {
+  document.addEventListener('click', (e) => {
+    const searchContainer = document.querySelector('.search-container'); // make sure you wrap search in a container
+    const resultsDiv = document.getElementById('searchResults');
+    
+    if (!searchContainer || !searchContainer.contains(e.target)) {
+      hideSearchResults();
+    }
+  });
+}
+
+// Keyboard support
+function setupSearchKeyboard() {
+  const searchInput = document.getElementById('searchInput');
+
+  searchInput.addEventListener('keydown', (e) => {
+    const resultsDiv = document.getElementById('searchResults');
+    
+    if (e.key === 'Escape') {
+      hideSearchResults();
+      searchInput.blur();
+    }
+    
+    // Optional: Add arrow key navigation later if needed
+  });
+}
+
+// Initialize search
+function initSearch() {
+  const searchInput = document.getElementById('searchInput');
+  
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', (e) => {
+    handleSearch(e.target.value);
+  });
+
+  // Ctrl/Cmd + K focus
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+
+  // Close on blur with small delay (allows clicking results)
+  searchInput.addEventListener('blur', () => {
+    setTimeout(hideSearchResults, 200);
+  });
+
+  setupSearchClickOutside();
+  setupSearchKeyboard();
+}
 
   function goHome() {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
